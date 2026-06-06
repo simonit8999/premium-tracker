@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>👑 PREMIUM Трекер 60 Дней</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>👑 PREMIUM 60 Days Tracker</title>
     <style>
         :root {
             --bg: #0a0a0a;
@@ -17,7 +17,7 @@
             --shadow-gold: 0 0 20px rgba(255, 215, 0, 0.3);
             --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
             --border-gold: 1px solid var(--gold);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 0.2s ease;
         }
 
         .light-theme {
@@ -26,9 +26,8 @@
             --gold: #B8860B;
             --gold-dark: #8B6914;
             --text: #1a1a1a;
-            --text-secondary: #666666;
+            --text-secondary: #666;
             --shadow-gold: 0 0 20px rgba(184, 134, 11, 0.2);
-            --border-gold: 1px solid var(--gold);
         }
 
         * {
@@ -38,18 +37,17 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
-            overflow-x: hidden;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             transition: var(--transition);
-            -webkit-tap-highlight-color: transparent;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Фон с частицами */
         .bg-particles {
             position: fixed;
             top: 0;
@@ -68,169 +66,96 @@
             border-radius: 50%;
             animation: float 6s infinite;
             opacity: 0;
-            box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 6px var(--gold);
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) scale(1);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
         }
 
-        /* Контейнер приложения */
         .app-container {
             position: relative;
             z-index: 1;
             max-width: 480px;
             margin: 0 auto;
-            padding: 10px 15px 90px;
-            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 8px 12px;
         }
 
-        /* Шапка */
         .header {
             text-align: center;
-            padding: 15px 0;
-            position: relative;
+            padding: 8px 0;
+            flex-shrink: 0;
         }
 
         .premium-badge {
             display: inline-block;
             background: var(--gradient-gold);
             color: #000;
-            padding: 6px 16px;
+            padding: 4px 14px;
             border-radius: 20px;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 1px;
             animation: shimmer 2s infinite;
             box-shadow: var(--shadow-gold);
         }
 
         @keyframes shimmer {
-            0%,
-            100% {
-                filter: brightness(1);
-            }
-            50% {
-                filter: brightness(1.2);
-            }
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
         }
 
         .logo {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
-            margin-top: 8px;
+            margin-top: 4px;
             background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: none;
         }
 
-        /* Навигация */
-        .nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--surface);
-            border-top: var(--border-gold);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            z-index: 100;
-            max-width: 480px;
-            margin: 0 auto;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 70px;
         }
 
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 12px;
-            padding: 6px 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            min-width: 55px;
-        }
-
-        .nav-btn.active {
-            color: var(--gold);
-            background: rgba(255, 215, 0, 0.1);
-            box-shadow: var(--shadow-gold);
-            transform: translateY(-2px);
-        }
-
-        .nav-btn:hover {
-            color: var(--gold);
-            transform: translateY(-2px);
-        }
-
-        .nav-emoji {
-            font-size: 20px;
-        }
-
-        /* Экраны */
         .screen {
             display: none;
-            animation: fadeSlideIn 0.3s ease;
+            animation: fadeIn 0.2s ease;
         }
 
         .screen.active {
             display: block;
         }
 
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Карточка */
         .card {
             background: var(--surface);
             border: var(--border-gold);
-            border-radius: 20px;
-            padding: 20px;
-            margin: 15px 0;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 8px 0;
             box-shadow: var(--shadow-gold);
-            transition: var(--transition);
         }
 
-        .card:hover {
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-        }
-
-        /* Прогресс-бар */
         .progress-container {
-            margin: 15px 0;
+            margin: 8px 0;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            height: 14px;
+            border-radius: 8px;
+            height: 10px;
             overflow: hidden;
             border: 1px solid var(--gold-dark);
         }
@@ -238,8 +163,8 @@
         .progress-bar {
             height: 100%;
             background: var(--gradient-gold);
-            border-radius: 10px;
-            transition: width 0.5s ease;
+            border-radius: 8px;
+            transition: width 0.4s ease;
             position: relative;
             overflow: hidden;
         }
@@ -256,32 +181,35 @@
         }
 
         @keyframes shimmer-bar {
-            100% {
-                left: 100%;
-            }
+            100% { left: 100%; }
         }
 
-        /* Сетка дней */
+        .days-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
         .days-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 8px;
-            margin: 15px 0;
+            gap: 5px;
+            flex: 1;
         }
 
         .day-cell {
             aspect-ratio: 1;
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             transition: var(--transition);
             background: var(--surface);
             border: 1px solid #333;
-            position: relative;
             color: var(--text-secondary);
         }
 
@@ -289,75 +217,121 @@
             background: var(--gradient-gold);
             color: #000;
             border-color: var(--gold);
-            animation: completePop 0.5s ease;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
         }
 
         .day-cell.current {
             border: 2px solid var(--gold);
             animation: pulse 2s infinite;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
             color: var(--gold);
         }
 
+        .day-cell.locked {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
         @keyframes pulse {
-            0%,
-            100% {
-                box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
-            }
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
         }
 
-        @keyframes completePop {
-            0% {
-                transform: scale(0.8);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .nav-arrow {
+            background: var(--surface);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            flex-shrink: 0;
         }
 
-        /* Кнопки */
+        .nav-arrow:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        .nav-arrow.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .page-indicator {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin: 4px 0;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 6px;
+            margin: 6px 0;
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid var(--gold-dark);
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .smart-warning {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin: 6px 0;
+            font-size: 12px;
+            color: var(--gold);
+        }
+
         .btn {
-            padding: 12px 24px;
-            border-radius: 25px;
+            padding: 10px 18px;
+            border-radius: 20px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: var(--transition);
             border: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
         }
 
         .btn-gold {
             background: var(--gradient-gold);
             color: #000;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-            animation: shimmer 2s infinite;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         }
 
-        .btn-gold:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+        .btn-gold:active {
+            transform: scale(0.95);
         }
 
         .btn-danger {
             background: var(--danger);
             color: white;
-            box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
-        }
-
-        .btn-danger:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 68, 68, 0.7);
         }
 
         .btn-outline {
@@ -366,143 +340,118 @@
             color: var(--gold);
         }
 
-        .btn-outline:hover {
-            background: rgba(255, 215, 0, 0.1);
-            transform: scale(1.05);
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 11px;
+            border-radius: 15px;
         }
 
         .btn-block {
             display: flex;
             width: 100%;
-            margin: 8px 0;
+            margin: 4px 0;
         }
 
-        /* Статистика */
-        .stats-row {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .stat-item {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            background: var(--surface);
-            border-radius: 15px;
-            border: 1px solid var(--gold-dark);
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--gold);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        /* Умное предупреждение */
-        .smart-warning {
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid var(--gold);
-            border-radius: 15px;
-            padding: 12px 16px;
-            margin: 10px 0;
-            font-size: 13px;
-            color: var(--gold);
-            animation: fadeSlideIn 0.5s ease;
-        }
-
-        /* Достижения */
-        .achievement-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 15px;
-            background: var(--surface);
-            border: 1px solid #333;
-            transition: var(--transition);
-        }
-
-        .achievement-card.unlocked {
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        }
-
-        .achievement-card.locked {
-            opacity: 0.5;
-        }
-
-        .achievement-icon {
-            font-size: 30px;
-        }
-
-        /* Модальное окно */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 200;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: fadeIn 0.2s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
         }
 
         .modal {
             background: var(--surface);
             border: var(--border-gold);
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             max-width: 90%;
-            width: 380px;
+            width: 360px;
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
         }
 
         .modal textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border-radius: 10px;
             border: 1px solid var(--gold-dark);
             background: var(--bg);
             color: var(--text);
             resize: vertical;
-            min-height: 80px;
-            margin: 10px 0;
-        }
-
-        /* История */
-        .history-item {
-            background: var(--surface);
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 15px;
+            min-height: 70px;
             margin: 8px 0;
         }
 
-        /* Тогл */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: var(--border-gold);
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0;
+            z-index: 100;
+            max-width: 480px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-btn.active {
+            color: var(--gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-emoji {
+            font-size: 18px;
+        }
+
+        .setting-block {
+            padding: 12px;
+            margin: 8px 0;
+            background: var(--surface);
+            border: 1px solid var(--gold-dark);
+            border-radius: 14px;
+        }
+
+        .setting-block h3 {
+            color: var(--gold);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+        }
+
         .toggle-switch {
             position: relative;
-            width: 50px;
-            height: 26px;
+            width: 44px;
+            height: 24px;
             display: inline-block;
         }
 
@@ -520,20 +469,20 @@
             right: 0;
             bottom: 0;
             background: #333;
-            border-radius: 26px;
-            transition: var(--transition);
+            border-radius: 24px;
+            transition: 0.3s;
         }
 
         .slider::before {
             content: '';
             position: absolute;
-            height: 20px;
-            width: 20px;
+            height: 18px;
+            width: 18px;
             left: 3px;
             bottom: 3px;
             background: white;
             border-radius: 50%;
-            transition: var(--transition);
+            transition: 0.3s;
         }
 
         input:checked+.slider {
@@ -541,46 +490,41 @@
         }
 
         input:checked+.slider::before {
-            transform: translateX(24px);
-        }
-
-        /* Промпты */
-        .prompt-box {
-            background: var(--bg);
-            border: 1px solid var(--gold-dark);
-            border-radius: 12px;
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 13px;
-            max-height: 200px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            color: var(--text-secondary);
+            transform: translateX(20px);
         }
 
         .link-item {
             display: block;
-            padding: 12px;
-            margin: 6px 0;
-            background: var(--surface);
-            border-radius: 12px;
+            padding: 10px;
+            margin: 4px 0;
+            background: var(--bg);
+            border-radius: 10px;
             text-decoration: none;
             color: var(--text);
             border: 1px solid #333;
-            transition: var(--transition);
+            font-size: 13px;
         }
 
-        .link-item:hover {
+        .link-item:active {
             border-color: var(--gold);
-            transform: translateX(5px);
         }
 
         .help-step {
-            padding: 10px;
-            margin: 6px 0;
+            padding: 8px;
+            margin: 4px 0;
             background: rgba(255, 215, 0, 0.05);
-            border-radius: 10px;
+            border-radius: 8px;
             border-left: 3px solid var(--gold);
+            font-size: 12px;
+        }
+
+        select, input[type="number"] {
+            background: var(--bg);
+            border: 1px solid var(--gold-dark);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -588,104 +532,125 @@
 
     <div class="bg-particles" id="particles"></div>
 
-    <div class="app-container" id="app">
+    <div class="app-container">
         <!-- Шапка -->
         <div class="header">
             <div class="premium-badge">👑 PREMIUM</div>
             <div class="logo">👑 60 Дней</div>
         </div>
 
-        <!-- Экран 1: Трекер -->
-        <div class="screen active" id="screen-tracker">
-            <div class="card">
-                <div class="progress-container">
-                    <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+        <!-- Основной контент -->
+        <div class="main-content" id="main-content">
+            <!-- Экран Трекера -->
+            <div class="screen active" id="screen-tracker">
+                <div class="card">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <div style="text-align:center; font-weight:700; color: var(--gold); font-size:13px;" id="progress-text">0% завершено</div>
                 </div>
-                <div style="text-align:center; font-weight:700; color: var(--gold);" id="progress-text">0% завершено</div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-days">0</div>
+                        <div class="stat-label">Всего дней</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="best-streak">0</div>
+                        <div class="stat-label">Лучшая серия</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-attempts">0</div>
+                        <div class="stat-label">Попыток</div>
+                    </div>
+                </div>
+
+                <div class="smart-warning" id="smart-warning">💡 Первые дни — самые важные</div>
+
+                <div class="days-section">
+                    <button class="nav-arrow" id="prev-page" onclick="changePage(-1)">◀</button>
+                    <div class="days-grid" id="days-grid"></div>
+                    <button class="nav-arrow" id="next-page" onclick="changePage(1)">▶</button>
+                </div>
+                <div class="page-indicator" id="page-indicator">Дни 1-30</div>
+
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn btn-gold btn-block" onclick="completeDay()">✅ Выполнил</button>
+                    <button class="btn btn-danger" style="flex:1;" onclick="failDay()">❌ Сорвался</button>
+                    <button class="btn btn-outline" style="flex:1;" onclick="helpMe()">🆘 ПОМОГИТЕ</button>
+                </div>
+                <button class="btn btn-outline btn-block btn-sm" onclick="resetAttempt()">🔄 Начать новую попытку</button>
             </div>
 
-            <div class="stats-row">
-                <div class="stat-item">
-                    <div class="stat-value" id="total-days">0</div>
-                    <div class="stat-label">Всего дней</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="best-streak">0</div>
-                    <div class="stat-label">Лучшая серия</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="total-attempts">0</div>
-                    <div class="stat-label">Попыток</div>
-                </div>
+            <!-- Экран Истории -->
+            <div class="screen" id="screen-history">
+                <h3 style="color: var(--gold); margin:8px 0;">📋 История попыток</h3>
+                <div id="history-list"></div>
             </div>
 
-            <div class="smart-warning" id="smart-warning">💡 Первые дни — самые важные</div>
-
-            <div class="days-grid" id="days-grid"></div>
-
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-                <button class="btn btn-gold btn-block" onclick="completeDay()">✅ Выполнил</button>
-                <button class="btn btn-danger" style="flex:1;" onclick="failDay()">❌ Сорвался</button>
-                <button class="btn btn-outline" style="flex:1;" onclick="helpMe()">🆘 ПОМОГИТЕ</button>
+            <!-- Экран Достижений -->
+            <div class="screen" id="screen-achievements">
+                <h3 style="color: var(--gold); margin:8px 0;">🏆 Достижения</h3>
+                <div id="achievements-list"></div>
+                <button class="btn btn-gold btn-block" id="certificate-btn" style="display:none;" onclick="getCertificate()">🎓 Получить сертификат</button>
             </div>
-            <button class="btn btn-outline btn-block" onclick="resetAttempt()" style="margin-top:8px;">🔄 Начать новую попытку</button>
-        </div>
 
-        <!-- Экран 2: История -->
-        <div class="screen" id="screen-history">
-            <h2 style="color: var(--gold); margin-bottom:15px;">📋 История попыток</h2>
-            <div id="history-list"></div>
-        </div>
+            <!-- Экран ИИ -->
+            <div class="screen" id="screen-ai">
+                <h3 style="color: var(--gold); margin:8px 0;">🤖 ИИ-Промпты</h3>
+                <button class="btn btn-outline btn-block btn-sm" onclick="copyPrompt('start')">📋 Промпт перед стартом</button>
+                <button class="btn btn-outline btn-block btn-sm" onclick="copyPrompt('pareto')">📋 Принцип Парето (30 дн)</button>
+                <h4 style="color: var(--gold); margin-top:12px; font-size:13px;">Бесплатные ИИ:</h4>
+                <a class="link-item" href="https://chat.openai.com" target="_blank">🤖 ChatGPT</a>
+                <a class="link-item" href="https://claude.ai" target="_blank">🤖 Claude</a>
+                <a class="link-item" href="https://chat.deepseek.com" target="_blank">🤖 DeepSeek</a>
+                <a class="link-item" href="https://gemini.google.com" target="_blank">🤖 Gemini</a>
+                <a class="link-item" href="https://copilot.microsoft.com" target="_blank">🤖 Copilot</a>
+            </div>
 
-        <!-- Экран 3: Достижения -->
-        <div class="screen" id="screen-achievements">
-            <h2 style="color: var(--gold); margin-bottom:15px;">🏆 Достижения</h2>
-            <div id="achievements-list"></div>
-            <button class="btn btn-gold btn-block" id="certificate-btn" style="display:none; margin-top:15px;" onclick="getCertificate()">🎓 Получить сертификат</button>
-        </div>
-
-        <!-- Экран 4: ИИ -->
-        <div class="screen" id="screen-ai">
-            <h2 style="color: var(--gold); margin-bottom:15px;">🤖 ИИ-Промпты</h2>
-            <button class="btn btn-outline btn-block" onclick="copyPrompt('start')">📋 Промпт перед стартом</button>
-            <button class="btn btn-outline btn-block" onclick="copyPrompt('pareto')">📋 Промпт после 30 дней — Принцип Парето</button>
-            <h3 style="color: var(--gold); margin-top:20px;">Бесплатные ИИ:</h3>
-            <a class="link-item" href="https://chat.openai.com" target="_blank">🤖 ChatGPT</a>
-            <a class="link-item" href="https://claude.ai" target="_blank">🤖 Claude</a>
-            <a class="link-item" href="https://chat.deepseek.com" target="_blank">🤖 DeepSeek</a>
-            <a class="link-item" href="https://gemini.google.com" target="_blank">🤖 Gemini</a>
-            <a class="link-item" href="https://copilot.microsoft.com" target="_blank">🤖 Copilot</a>
-        </div>
-
-        <!-- Экран 5: Настройки -->
-        <div class="screen" id="screen-settings">
-            <h2 style="color: var(--gold); margin-bottom:15px;">⚙️ Настройки</h2>
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span>🎨 Тема оформления</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
-                        <span class="slider"></span>
-                    </label>
+            <!-- Экран Настроек -->
+            <div class="screen" id="screen-settings">
+                <h3 style="color: var(--gold); margin:8px 0;">⚙️ Настройки</h3>
+                
+                <div class="setting-block">
+                    <h3>🎨 Тема оформления</h3>
+                    <div class="toggle-row">
+                        <span>Тёмная / Светлая</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
-                <div style="margin-top:15px;">
-                    <span>🔔 Уведомления от бота</span>
-                    <div style="display:flex; gap:8px; margin-top:8px;">
-                        <input type="number" id="notify-hour" placeholder="Час" min="0" max="23" style="width:60px; padding:8px; border-radius:8px; border:1px solid var(--gold-dark); background:var(--bg); color:var(--text);">
-                        <input type="number" id="notify-minute" placeholder="Мин" min="0" max="59" style="width:60px; padding:8px; border-radius:8px; border:1px solid var(--gold-dark); background:var(--bg); color:var(--text);">
-                        <select id="timezone" style="padding:8px; border-radius:8px; border:1px solid var(--gold-dark); background:var(--bg); color:var(--text);">
+
+                <div class="setting-block">
+                    <h3>🌐 Язык</h3>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <span id="lang-label">Русский</span>
+                        <button class="btn btn-outline btn-sm" onclick="toggleLanguage()">Сменить</button>
+                    </div>
+                </div>
+
+                <div class="setting-block">
+                    <h3>💬 Связь с автором</h3>
+                    <a href="https://t.me/Piholaa" target="_blank" class="link-item" style="text-align:center;">
+                        ✉️ Написать @Piholaa
+                    </a>
+                </div>
+
+                <div class="setting-block">
+                    <h3>🔔 Уведомления</h3>
+                    <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                        <input type="number" id="notify-hour" placeholder="Час" min="0" max="23" style="width:50px;">
+                        <span>:</span>
+                        <input type="number" id="notify-minute" placeholder="Мин" min="0" max="59" style="width:50px;">
+                        <select id="timezone" style="flex:1; min-width:100px;">
                             <option value="Europe/Moscow">Москва</option>
                             <option value="Europe/London">Лондон</option>
                             <option value="America/New_York">Нью-Йорк</option>
                         </select>
+                        <button class="btn btn-gold btn-sm" onclick="saveNotificationSettings()">💾</button>
                     </div>
-                </div>
-                <div style="margin-top:15px;">
-                    <a href="https://t.me/Piholaa" target="_blank" style="color: var(--gold); text-decoration:none;">💬 Поддержка @Piholaa</a>
-                </div>
-                <div style="margin-top:15px;">
-                    <span>🌐 Язык: <strong id="lang-label">Русский</strong></span>
-                    <button class="btn btn-outline" style="margin-left:10px;" onclick="toggleLanguage()">Сменить</button>
                 </div>
             </div>
         </div>
@@ -706,12 +671,12 @@
             <span class="nav-emoji">🤖</span> ИИ
         </button>
         <button class="nav-btn" data-screen="settings">
-            <span class="nav-emoji">⚙️</span> Настройки
+            <span class="nav-emoji">⚙</span> Настройки
         </button>
     </nav>
 
     <script>
-        // ==================== TELEGRAM WEBAPP API ====================
+        // ==================== TELEGRAM WEBAPP ====================
         const tg = window.Telegram?.WebApp;
         const isTelegram = !!tg;
         if (isTelegram) {
@@ -721,7 +686,7 @@
             tg.setBackgroundColor('#0a0a0a');
         }
 
-        // ==================== ЧАСТИЦЫ ФОНА ====================
+        // ==================== ЧАСТИЦЫ ====================
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 30; i++) {
             const particle = document.createElement('div');
@@ -734,21 +699,22 @@
 
         // ==================== ДАННЫЕ ====================
         const DEFAULT_DATA = {
-            currentAttempt: null, // { startDate: ISO string, completedDays: [] }
+            currentAttempt: null,
             totalDays: 0,
             bestStreak: 0,
-            attemptsHistory: [], // [{ startDate, endDate, daysCompleted, reason }]
-            achievements: {}, // { '10': null, '20': null, ... } дата получения
+            attemptsHistory: [],
+            achievements: {},
             theme: 'dark',
             language: 'ru',
-            notifications: { hour: 9, minute: 0, timezone: 'Europe/Moscow' }
+            notifications: { hour: 9, minute: 0, timezone: 'Europe/Moscow' },
+            currentPage: 0
         };
 
         let appData = loadData();
 
         function loadData() {
             try {
-                const saved = localStorage.getItem('premium_tracker_60');
+                const saved = localStorage.getItem('premium_tracker_60_v2');
                 return saved ? { ...DEFAULT_DATA, ...JSON.parse(saved) } : { ...DEFAULT_DATA };
             } catch (e) {
                 return { ...DEFAULT_DATA };
@@ -756,8 +722,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('premium_tracker_60', JSON.stringify(appData));
-            updateStats();
+            localStorage.setItem('premium_tracker_60_v2', JSON.stringify(appData));
         }
 
         // ==================== НАВИГАЦИЯ ====================
@@ -768,16 +733,44 @@
                 const screenName = btn.dataset.screen;
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
                 document.getElementById(`screen-${screenName}`).classList.add('active');
+                
                 if (screenName === 'history') renderHistory();
                 if (screenName === 'achievements') renderAchievements();
+                
+                document.getElementById('main-content').scrollTop = 0;
             });
         });
 
-        // ==================== ОСНОВНЫЕ ФУНКЦИИ ====================
+        // ==================== СТРАНИЦЫ ДНЕЙ ====================
+        function changePage(direction) {
+            appData.currentPage = (appData.currentPage || 0) + direction;
+            if (appData.currentPage < 0) appData.currentPage = 0;
+            if (appData.currentPage > 1) appData.currentPage = 1;
+            
+            renderTrackerGrid();
+            updatePageControls();
+        }
+
+        function updatePageControls() {
+            const prevBtn = document.getElementById('prev-page');
+            const nextBtn = document.getElementById('next-page');
+            const indicator = document.getElementById('page-indicator');
+            
+            if (appData.currentPage === 0) {
+                prevBtn.classList.add('disabled');
+                nextBtn.classList.remove('disabled');
+                indicator.textContent = 'Дни 1-30';
+            } else {
+                prevBtn.classList.remove('disabled');
+                nextBtn.classList.add('disabled');
+                indicator.textContent = 'Дни 31-60';
+            }
+        }
+
+        // ==================== ТРЕКЕР ====================
         function updateStats() {
             const completed = appData.currentAttempt?.completedDays?.length || 0;
-            const total = 60;
-            const percent = Math.round((completed / total) * 100);
+            const percent = Math.round((completed / 60) * 100);
 
             document.getElementById('progress-bar').style.width = percent + '%';
             document.getElementById('progress-text').textContent = percent + '% завершено';
@@ -788,6 +781,7 @@
             updateSmartWarning(completed);
             renderTrackerGrid();
             checkAchievements();
+            saveData();
         }
 
         function renderTrackerGrid() {
@@ -795,8 +789,10 @@
             grid.innerHTML = '';
             const completedDays = appData.currentAttempt?.completedDays || [];
             const currentDay = completedDays.length + 1;
+            const startDay = appData.currentPage === 0 ? 1 : 31;
+            const endDay = appData.currentPage === 0 ? 30 : 60;
 
-            for (let i = 1; i <= 60; i++) {
+            for (let i = startDay; i <= endDay; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'day-cell';
                 cell.textContent = i;
@@ -805,6 +801,8 @@
                     cell.classList.add('completed');
                 } else if (i === currentDay && appData.currentAttempt) {
                     cell.classList.add('current');
+                } else if (i > currentDay) {
+                    cell.classList.add('locked');
                 }
 
                 cell.addEventListener('click', () => {
@@ -818,10 +816,7 @@
                 grid.appendChild(cell);
             }
 
-            document.getElementById('progress-text').textContent =
-                `${Math.round((completedDays.length / 60) * 100)}% завершено`;
-            document.getElementById('progress-bar').style.width =
-                `${Math.round((completedDays.length / 60) * 100)}%`;
+            updatePageControls();
         }
 
         function updateSmartWarning(day) {
@@ -858,11 +853,26 @@
                 return;
             }
 
+            // Проверка: можно отметить только 1 день в сутки
+            const today = new Date().toDateString();
+            const lastCompleted = appData.currentAttempt.lastCompletedDate;
+            
+            if (lastCompleted === today && appData.currentAttempt.completedDays.includes(nextDay - 1)) {
+                showPopup('⚠️', 'Подождите!', 'Можно отметить только 1 день в сутки');
+                return;
+            }
+
             if (!appData.currentAttempt.completedDays.includes(nextDay)) {
                 appData.currentAttempt.completedDays.push(nextDay);
+                appData.currentAttempt.lastCompletedDate = today;
                 appData.totalDays++;
                 appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
-                saveData();
+                
+                // Автоматически переключаем на вторую страницу при достижении 30 дней
+                if (nextDay > 30 && appData.currentPage === 0) {
+                    appData.currentPage = 1;
+                }
+                
                 updateStats();
                 showPopup('✅', `День ${nextDay} выполнен!`, 'Продолжай в том же духе!');
             }
@@ -880,9 +890,9 @@
                 <div class="modal">
                     <h3 style="color: var(--gold);">❌ Причина срыва</h3>
                     <textarea id="fail-reason" placeholder="Опишите причину..."></textarea>
-                    <div style="display:flex; gap:8px; margin-top:10px;">
-                        <button class="btn btn-outline" style="flex:1;" onclick="this.closest('.modal-overlay').remove()">ОТМЕНА</button>
-                        <button class="btn btn-danger" style="flex:1;" id="save-fail">СОХРАНИТЬ</button>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="this.closest('.modal-overlay').remove()">ОТМЕНА</button>
+                        <button class="btn btn-danger btn-sm" style="flex:1;" id="save-fail">СОХРАНИТЬ</button>
                     </div>
                 </div>
             `;
@@ -898,7 +908,7 @@
                     reason: reason
                 });
                 appData.currentAttempt = null;
-                saveData();
+                appData.currentPage = 0;
                 updateStats();
                 modal.remove();
                 showPopup('💪', 'Попытка сохранена', 'Не сдавайся! Начни заново!');
@@ -913,20 +923,18 @@
             if (appData.currentAttempt && appData.currentAttempt.completedDays.length > 0) {
                 const confirmed = confirm('Начать новую попытку? Текущий прогресс будет сохранён в историю.');
                 if (!confirmed) return;
-                if (appData.currentAttempt.completedDays.length > 0) {
-                    appData.attemptsHistory.push({
-                        startDate: appData.currentAttempt.startDate,
-                        endDate: new Date().toISOString(),
-                        daysCompleted: appData.currentAttempt.completedDays.length,
-                        reason: 'Сброс пользователем'
-                    });
-                }
+                appData.attemptsHistory.push({
+                    startDate: appData.currentAttempt.startDate,
+                    endDate: new Date().toISOString(),
+                    daysCompleted: appData.currentAttempt.completedDays.length,
+                    reason: 'Сброс пользователем'
+                });
             }
             appData.currentAttempt = {
                 startDate: new Date().toISOString(),
                 completedDays: []
             };
-            saveData();
+            appData.currentPage = 0;
             updateStats();
             showPopup('🔄', 'Новая попытка начата!', 'Удачи!');
         }
@@ -941,8 +949,8 @@
                     <div class="help-step">2. ХОЛОДНАЯ ВОДА</div>
                     <div class="help-step">3. 20 ПРИСЕДАНИЙ</div>
                     <div class="help-step">4. ДЫШИ: 4-7-8</div>
-                    <p style="margin-top:10px; color: var(--gold);">Позыв уйдёт через 15 минут. Держись!</p>
-                    <button class="btn btn-gold btn-block" onclick="this.closest('.modal-overlay').remove()">ПОНЯЛ</button>
+                    <p style="margin-top:8px; color: var(--gold); font-size:12px;">Позыв уйдёт через 15 минут. Держись!</p>
+                    <button class="btn btn-gold btn-block btn-sm" onclick="this.closest('.modal-overlay').remove()">ПОНЯЛ</button>
                 </div>
             `;
             document.body.appendChild(modal);
@@ -956,10 +964,10 @@
             popup.className = 'modal-overlay';
             popup.innerHTML = `
                 <div class="modal" style="text-align:center;">
-                    <div style="font-size:50px;">${emoji}</div>
+                    <div style="font-size:40px;">${emoji}</div>
                     <h3 style="color: var(--gold);">${title}</h3>
-                    <p>${message}</p>
-                    <button class="btn btn-gold" style="margin-top:15px;" onclick="this.closest('.modal-overlay').remove()">OK</button>
+                    <p style="font-size:13px;">${message}</p>
+                    <button class="btn btn-gold btn-sm" style="margin-top:12px;" onclick="this.closest('.modal-overlay').remove()">OK</button>
                 </div>
             `;
             document.body.appendChild(popup);
@@ -974,7 +982,7 @@
             const icons = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '💎', 50: '🔥', 60: '👑' };
             const completedDays = appData.currentAttempt?.completedDays?.length || 0;
 
-                        milestones.forEach(m => {
+                       milestones.forEach(m => {
                 if (completedDays >= m && !appData.achievements[m]) {
                     appData.achievements[m] = new Date().toISOString();
                     showPopup(icons[m], `Достижение разблокировано!`, `${m} дней пройдено!`);
@@ -988,52 +996,50 @@
             const milestones = [10, 20, 30, 40, 50, 60];
             const icons = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '💎', 50: '🔥', 60: '👑' };
             const names = {
-                10: '10 дней',
-                20: '20 дней',
-                30: '30 дней',
-                40: '40 дней',
-                50: '50 дней',
-                60: '60 дней'
+                10: '10 дней', 20: '20 дней', 30: '30 дней',
+                40: '40 дней', 50: '50 дней', 60: '60 дней'
             };
 
             container.innerHTML = '';
-            let hasAll = true;
 
             milestones.forEach(m => {
                 const card = document.createElement('div');
-                card.className = 'achievement-card';
-                
+                card.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 10px;
+                    margin: 6px 0;
+                    border-radius: 12px;
+                    background: var(--surface);
+                    border: 1px solid ${appData.achievements[m] ? 'var(--gold)' : '#333'};
+                    opacity: ${appData.achievements[m] ? '1' : '0.5'};
+                `;
+
                 if (appData.achievements[m]) {
-                    card.classList.add('unlocked');
                     const date = new Date(appData.achievements[m]).toLocaleDateString('ru-RU');
                     card.innerHTML = `
-                        <div class="achievement-icon">${icons[m]}</div>
+                        <div style="font-size:28px;">${icons[m]}</div>
                         <div>
                             <strong>${names[m]}</strong>
-                            <div style="font-size:12px; color: var(--text-secondary);">Получено: ${date}</div>
+                            <div style="font-size:11px; color: var(--text-secondary);">${date}</div>
                         </div>
                     `;
                 } else {
-                    card.classList.add('locked');
-                    hasAll = false;
                     card.innerHTML = `
-                        <div class="achievement-icon">🔒</div>
+                        <div style="font-size:28px;">🔒</div>
                         <div>
                             <strong>${names[m]}</strong>
-                            <div style="font-size:12px; color: var(--text-secondary);">Не выполнено</div>
+                            <div style="font-size:11px; color: var(--text-secondary);">Не выполнено</div>
                         </div>
                     `;
                 }
-                
+
                 container.appendChild(card);
             });
 
             const certBtn = document.getElementById('certificate-btn');
-            if (appData.achievements[60]) {
-                certBtn.style.display = 'block';
-            } else {
-                certBtn.style.display = 'none';
-            }
+            certBtn.style.display = appData.achievements[60] ? 'block' : 'none';
         }
 
         function getCertificate() {
@@ -1041,16 +1047,14 @@
             modal.className = 'modal-overlay';
             modal.innerHTML = `
                 <div class="modal" style="text-align:center;">
-                    <div style="font-size:60px;">👑</div>
+                    <div style="font-size:50px;">👑</div>
                     <h2 style="color: var(--gold);">СЕРТИФИКАТ</h2>
-                    <p style="margin:15px 0;">Поздравляем! Вы успешно завершили 60-дневный челлендж!</p>
-                    <p style="color: var(--text-secondary);">
-                        Дата завершения: ${new Date(appData.achievements[60]).toLocaleDateString('ru-RU')}
+                    <p style="margin:10px 0;">Поздравляем! Вы завершили 60 дней!</p>
+                    <p style="color: var(--text-secondary); font-size:12px;">
+                        ${new Date(appData.achievements[60]).toLocaleDateString('ru-RU')}
                     </p>
-                    <p style="margin-top:15px; font-weight:bold; color: var(--gold);">
-                        Вы доказали свою силу воли! 🏆
-                    </p>
-                    <button class="btn btn-gold" style="margin-top:15px;" onclick="this.closest('.modal-overlay').remove()">ЗАКРЫТЬ</button>
+                    <button class="btn btn-gold btn-sm" style="margin-top:10px;" 
+                            onclick="this.closest('.modal-overlay').remove()">ЗАКРЫТЬ</button>
                 </div>
             `;
             document.body.appendChild(modal);
@@ -1062,7 +1066,7 @@
         // ==================== ИСТОРИЯ ====================
         function renderHistory() {
             const container = document.getElementById('history-list');
-            
+
             if (!appData.attemptsHistory || appData.attemptsHistory.length === 0) {
                 container.innerHTML = '<p style="color: var(--text-secondary); text-align:center; padding:20px;">Нет попыток</p>';
                 return;
@@ -1071,21 +1075,27 @@
             container.innerHTML = '';
             appData.attemptsHistory.slice().reverse().forEach(attempt => {
                 const item = document.createElement('div');
-                item.className = 'history-item';
-                
+                item.style.cssText = `
+                    background: var(--surface);
+                    border: 1px solid #333;
+                    border-radius: 12px;
+                    padding: 12px;
+                    margin: 6px 0;
+                `;
+
                 const startDate = new Date(attempt.startDate).toLocaleDateString('ru-RU');
                 const endDate = new Date(attempt.endDate).toLocaleDateString('ru-RU');
-                
+
                 item.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                        <span>📅 ${startDate} → ${endDate}</span>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <span style="font-size:12px;">📅 ${startDate} → ${endDate}</span>
                         <span style="color: var(--gold); font-weight:bold;">${attempt.daysCompleted} дн.</span>
                     </div>
-                    <div style="color: var(--text-secondary); font-size:13px;">
+                    <div style="color: var(--text-secondary); font-size:11px;">
                         Причина: ${attempt.reason || 'Не указана'}
                     </div>
                 `;
-                
+
                 container.appendChild(item);
             });
         }
@@ -1093,17 +1103,17 @@
         // ==================== ИИ ПРОМПТЫ ====================
         function copyPrompt(type) {
             let text = '';
-            
+
             if (type === 'start') {
                 text = `Я начинаю 60-дневный челлендж по самодисциплине. Моя цель — продержаться 60 дней без срывов. Помоги мне составить план на первые 7 дней с конкретными действиями на каждый день. Учти, что первые дни самые сложные. Дай мне мотивационную поддержку и практические советы по преодолению трудностей.`;
             } else if (type === 'pareto') {
                 text = `Я прошел 30 дней из 60 в моем челлендже по самодисциплине. Используя Принцип Парето (80/20), помоги мне проанализировать: какие 20% моих действий принесли 80% результата? Как оптимизировать оставшиеся 30 дней для максимальной эффективности? Дай конкретные рекомендации на основе этого принципа.`;
             }
-            
+
             navigator.clipboard.writeText(text).then(() => {
                 showPopup('📋', 'Скопировано!', 'Промпт скопирован в буфер обмена');
             }).catch(() => {
-                alert('Не удалось скопировать. Пожалуйста, попробуйте еще раз.');
+                alert('Не удалось скопировать текст');
             });
         }
 
@@ -1137,7 +1147,17 @@
                 document.getElementById('lang-label').textContent = 'Русский';
             }
             saveData();
-            showPopup('🌐', 'Язык изменен', 'Некоторые элементы будут обновлены при следующем запуске');
+            showPopup('🌐', 'Язык изменён', 'Изменения применены');
+        }
+
+        function saveNotificationSettings() {
+            appData.notifications = {
+                hour: parseInt(document.getElementById('notify-hour').value) || 9,
+                minute: parseInt(document.getElementById('notify-minute').value) || 0,
+                timezone: document.getElementById('timezone').value
+            };
+            saveData();
+            showPopup('🔔', 'Сохранено!', 'Настройки уведомлений обновлены');
         }
 
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
@@ -1151,39 +1171,25 @@
                     tg.setBackgroundColor('#f5f0e8');
                 }
             }
-            
+
             // Применяем язык
             if (appData.language === 'en') {
                 document.getElementById('lang-label').textContent = 'English';
             }
-            
+
             // Загружаем настройки уведомлений
             if (appData.notifications) {
                 document.getElementById('notify-hour').value = appData.notifications.hour || 9;
                 document.getElementById('notify-minute').value = appData.notifications.minute || 0;
                 document.getElementById('timezone').value = appData.notifications.timezone || 'Europe/Moscow';
             }
-            
-            // Сохраняем настройки уведомлений при изменении
-            document.getElementById('notify-hour').addEventListener('change', saveNotificationSettings);
-            document.getElementById('notify-minute').addEventListener('change', saveNotificationSettings);
-            document.getElementById('timezone').addEventListener('change', saveNotificationSettings);
-            
-            // Рендерим начальный экран
+
+            // Начальный рендер
             updateStats();
             renderAchievements();
         }
 
-        function saveNotificationSettings() {
-            appData.notifications = {
-                hour: parseInt(document.getElementById('notify-hour').value) || 9,
-                minute: parseInt(document.getElementById('notify-minute').value) || 0,
-                timezone: document.getElementById('timezone').value
-            };
-            saveData();
-        }
-
-        // ==================== ЗАПУСК ====================
+        // Запуск приложения
         initApp();
     </script>
 </body>
