@@ -48,6 +48,20 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        .main-content::-webkit-scrollbar,
+        #history-list::-webkit-scrollbar,
+        #achievements-list::-webkit-scrollbar,
+        .modal::-webkit-scrollbar {
+            display: none;
+        }
+
+        .main-content,
+        #history-list,
+        #achievements-list {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         .bg-particles {
             position: fixed;
             top: 0;
@@ -387,6 +401,15 @@
             margin: 8px 0;
         }
 
+        .timer-display {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--gold);
+            text-align: center;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
         .nav {
             position: fixed;
             bottom: 0;
@@ -533,15 +556,12 @@
     <div class="bg-particles" id="particles"></div>
 
     <div class="app-container">
-        <!-- Шапка -->
         <div class="header">
             <div class="premium-badge">👑 PREMIUM</div>
             <div class="logo">👑 60 Дней</div>
         </div>
 
-        <!-- Основной контент -->
         <div class="main-content" id="main-content">
-            <!-- Экран Трекера -->
             <div class="screen active" id="screen-tracker">
                 <div class="card">
                     <div class="progress-container">
@@ -582,20 +602,17 @@
                 <button class="btn btn-outline btn-block btn-sm" onclick="resetAttempt()">🔄 Начать новую попытку</button>
             </div>
 
-            <!-- Экран Истории -->
             <div class="screen" id="screen-history">
                 <h3 style="color: var(--gold); margin:8px 0;">📋 История попыток</h3>
-                <div id="history-list"></div>
+                <div id="history-list" style="max-height: calc(100vh - 150px); overflow-y: auto;"></div>
             </div>
 
-            <!-- Экран Достижений -->
             <div class="screen" id="screen-achievements">
                 <h3 style="color: var(--gold); margin:8px 0;">🏆 Достижения</h3>
-                <div id="achievements-list"></div>
+                <div id="achievements-list" style="max-height: calc(100vh - 200px); overflow-y: auto;"></div>
                 <button class="btn btn-gold btn-block" id="certificate-btn" style="display:none;" onclick="getCertificate()">🎓 Получить сертификат</button>
             </div>
 
-            <!-- Экран ИИ -->
             <div class="screen" id="screen-ai">
                 <h3 style="color: var(--gold); margin:8px 0;">🤖 ИИ-Промпты</h3>
                 <button class="btn btn-outline btn-block btn-sm" onclick="copyPrompt('start')">📋 Промпт перед стартом</button>
@@ -608,7 +625,6 @@
                 <a class="link-item" href="https://copilot.microsoft.com" target="_blank">🤖 Copilot</a>
             </div>
 
-            <!-- Экран Настроек -->
             <div class="screen" id="screen-settings">
                 <h3 style="color: var(--gold); margin:8px 0;">⚙️ Настройки</h3>
                 
@@ -656,7 +672,6 @@
         </div>
     </div>
 
-    <!-- Нижняя навигация -->
     <nav class="nav">
         <button class="nav-btn active" data-screen="tracker">
             <span class="nav-emoji">📅</span> Трекер
@@ -676,7 +691,6 @@
     </nav>
 
     <script>
-        // ==================== TELEGRAM WEBAPP ====================
         const tg = window.Telegram?.WebApp;
         const isTelegram = !!tg;
         if (isTelegram) {
@@ -686,7 +700,6 @@
             tg.setBackgroundColor('#0a0a0a');
         }
 
-        // ==================== ЧАСТИЦЫ ====================
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 30; i++) {
             const particle = document.createElement('div');
@@ -697,7 +710,69 @@
             particlesContainer.appendChild(particle);
         }
 
-        // ==================== ДАННЫЕ ====================
+        const quotes = {
+            1: "Первый день — самый простой. Не обманывай себя.",
+            2: "Твой мозг ещё не понял, что ты серьёзно. Покажи ему.",
+            3: "Три дня. Это больше, чем 90% мужчин. Но ты не они.",
+            4: "Если тебе легко — ты делаешь что-то не так. Должно ломать.",
+            5: "Пять дней. Твоя бывшая версия уже не узнала бы тебя.",
+            6: "Триггеры не исчезли. Ты просто стал сильнее их замечать.",
+            7: "Первая неделя — грязь. Ты прошёл её. Дальше — холод.",
+            8: "Мозг захочет сделку. Не торгуйся.",
+            9: "Сублимация — не терпи. Переплавляй похоть в действие.",
+            10: "Десять дней. Дофаминовые рецепторы начали просыпаться.",
+            11: "Не запрещай. Заменяй. Ты умнее своего инстинкта.",
+            12: "Охлаждение — не шутка. Сделай. Прямо сейчас.",
+            13: "Сон — твоя перезагрузка. Не кради её у себя.",
+            14: "Две недели. Ты уже не тот, кем был 14 дней назад.",
+            15: "Пик ломки. Если ты здесь — ты пройдёшь всё.",
+            16: "Не проверяй 'а работает ли ещё'. Работает.",
+            17: "Утренняя эрекция — не враг. Это знак восстановления.",
+            18: "Эротический сон — не срыв. Твоё тело лечится.",
+            19: "Энергия прёт. Не сиди. Делай. Сейчас.",
+            20: "Женщины чувствуют твою силу. Не сливай её на первую встречную.",
+            21: "Три недели. Ты перестроил нейронные сети. Гордись. Но не расслабляйся.",
+            22: "Чувствительность вернулась. Теперь ты снова мужчина.",
+            23: "Злость — это топливо. Сожги её в деле, а не в унитаз.",
+            24: "Тестостерон на пике. Твой голос стал глубже.",
+            25: "Люди тянутся к тебе. Ты стал магнитом.",
+            26: "Осталось 4 дня. Ты не сдашься за четыре дня.",
+            27: "Энергия переполняет. Это суперсила.",
+            28: "Стресс — не оправдание. Стресс — это проверка.",
+            29: "Один день. Ты прошёл 29. Не сломайся.",
+            30: "Ты сделал выбор 30 раз. Ты — мужчина.",
+            31: "Ты перевалил за половину. 30 дней назад ты сомневался. Сегодня — нет.",
+            32: "Твой мозг перестроился на 70%. Старые триггеры больше не работают.",
+            33: "Ты не лучше 99% мужчин. Ты лучше себя вчерашнего. Это единственное сравнение.",
+            34: "Дофаминовая яма позади. Теперь реальность ярче любого экрана.",
+            35: "Пять недель. Твой голос глубже, взгляд твёрже. Ты чувствуешь это.",
+            36: "Спроси себя: что изменилось за 36 дней? Запиши. Перечитай.",
+            37: "Ты не борешься с собой. Ты управляешь собой. Разница колоссальная.",
+            38: "Вторая половина пути. Здесь идут единицы. Ты — один из них.",
+            39: "Твоя энергия пугает окружающих. Они не понимают откуда столько.",
+            40: "Сорок дней. Это больше чем многие мечтали. А ты — сделал.",
+            41: "Сравни себя с днём 0. Тот парень не знал что способен на это.",
+            42: "Ты переписал свои нейронные связи. Буквально. Научно доказано.",
+            43: "Женщины чувствуют твою силу. Не трать её на пустые разговоры.",
+            44: "До конца две недели. Две недели — и ты докажешь себе всё.",
+            45: "Твой тестостерон на историческом максимуме. Используй это.",
+            46: "Ты уже не тот кто начинал. Ты — версия 2.0. И это только начало.",
+            47: "Срывы других — не твоя история. Ты прошёл там где они упали.",
+            48: "Последние дни. Мозг попытается договориться. Не слушай.",
+            49: "Ты сделал выбор 49 раз. Ещё 11 — и ты закроешь этот гештальт.",
+            50: "Пятьдесят. Ты на финишной прямой. Не смотри по сторонам.",
+            51: "Каждый день с 51 по 60 — это твой личный рекорд. Гордись.",
+            52: "Ты спокоен. Ты уверен. Ты управляешь желаниями, а не они тобой.",
+            53: "Осталась неделя. Семь дней отделяют тебя от победы.",
+            54: "Твой сон глубокий. Твоя энергия стабильна. Ты восстановился.",
+            55: "Пять дней. Не торгуйся. Не проверяй. Просто дойди.",
+            56: "Ты молча делаешь то что другие обещают себе каждый понедельник.",
+            57: "Три дня. Ты на пике. Не расслабляйся на финише.",
+            58: "Предпоследний рывок. Самое сложное позади. Осталось чуть-чуть.",
+            59: "Завтра — день 60. Ты уже победил. Осталось формально закрыть.",
+            60: "Ты сделал это. 60 дней. Ты — лучшая версия себя. Не сравнивай. Просто будь."
+        };
+
         const DEFAULT_DATA = {
             currentAttempt: null,
             totalDays: 0,
@@ -714,7 +789,7 @@
 
         function loadData() {
             try {
-                const saved = localStorage.getItem('premium_tracker_60_v2');
+                const saved = localStorage.getItem('premium_tracker_60_v4');
                 return saved ? { ...DEFAULT_DATA, ...JSON.parse(saved) } : { ...DEFAULT_DATA };
             } catch (e) {
                 return { ...DEFAULT_DATA };
@@ -722,10 +797,9 @@
         }
 
         function saveData() {
-            localStorage.setItem('premium_tracker_60_v2', JSON.stringify(appData));
+            localStorage.setItem('premium_tracker_60_v4', JSON.stringify(appData));
         }
 
-        // ==================== НАВИГАЦИЯ ====================
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -741,7 +815,6 @@
             });
         });
 
-        // ==================== СТРАНИЦЫ ДНЕЙ ====================
         function changePage(direction) {
             appData.currentPage = (appData.currentPage || 0) + direction;
             if (appData.currentPage < 0) appData.currentPage = 0;
@@ -767,7 +840,6 @@
             }
         }
 
-        // ==================== ТРЕКЕР ====================
         function updateStats() {
             const completed = appData.currentAttempt?.completedDays?.length || 0;
             const percent = Math.round((completed / 60) * 100);
@@ -807,7 +879,7 @@
 
                 cell.addEventListener('click', () => {
                     if (completedDays.includes(i)) {
-                        showPopup('✅', `День ${i} выполнен!`, 'Так держать!');
+                        showPopup('✅', `День ${i}`, quotes[i] || 'Отличная работа!');
                     } else if (i === currentDay && appData.currentAttempt) {
                         completeDay();
                     }
@@ -837,9 +909,7 @@
             else if (day <= 40) warningEl.textContent = messages.second;
             else if (day <= 60) warningEl.textContent = messages.finish;
             else warningEl.textContent = '👑 Путь завершён!';
-        }
-
-        function completeDay() {
+               function completeDay() {
             if (!appData.currentAttempt) {
                 appData.currentAttempt = {
                     startDate: new Date().toISOString(),
@@ -853,7 +923,6 @@
                 return;
             }
 
-            // Проверка: можно отметить только 1 день в сутки
             const today = new Date().toDateString();
             const lastCompleted = appData.currentAttempt.lastCompletedDate;
             
@@ -868,13 +937,14 @@
                 appData.totalDays++;
                 appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
                 
-                // Автоматически переключаем на вторую страницу при достижении 30 дней
                 if (nextDay > 30 && appData.currentPage === 0) {
                     appData.currentPage = 1;
                 }
                 
                 updateStats();
-                showPopup('✅', `День ${nextDay} выполнен!`, 'Продолжай в том же духе!');
+                
+                const quote = quotes[nextDay] || 'Продолжай в том же духе!';
+                showPopup('✅', `День ${nextDay}`, quote);
             }
         }
 
@@ -939,23 +1009,87 @@
             showPopup('🔄', 'Новая попытка начата!', 'Удачи!');
         }
 
+        let helpTimerInterval = null;
+
         function helpMe() {
+            if (helpTimerInterval) {
+                clearInterval(helpTimerInterval);
+                helpTimerInterval = null;
+            }
+
             const modal = document.createElement('div');
             modal.className = 'modal-overlay';
+            modal.id = 'help-modal';
+            
+            let timeLeft = 15 * 60;
+            
             modal.innerHTML = `
                 <div class="modal">
-                    <h3 style="color: var(--gold);">🆘 ЭКСТРЕННАЯ ПОМОЩЬ</h3>
+                    <h3 style="color: var(--gold); text-align:center;">🆘 ЭКСТРЕННАЯ ПОМОЩЬ</h3>
+                    <div class="timer-display" id="help-timer">15:00</div>
                     <div class="help-step">1. ВСТАНЬ И ВЫЙДИ</div>
                     <div class="help-step">2. ХОЛОДНАЯ ВОДА</div>
                     <div class="help-step">3. 20 ПРИСЕДАНИЙ</div>
                     <div class="help-step">4. ДЫШИ: 4-7-8</div>
-                    <p style="margin-top:8px; color: var(--gold); font-size:12px;">Позыв уйдёт через 15 минут. Держись!</p>
-                    <button class="btn btn-gold btn-block btn-sm" onclick="this.closest('.modal-overlay').remove()">ПОНЯЛ</button>
+                    <p style="margin-top:8px; color: var(--gold); font-size:12px; text-align:center;">
+                        Позыв уйдёт через 15 минут. Держись!
+                    </p>
+                    <button class="btn btn-danger btn-block btn-sm" id="close-help" style="margin-top:10px;">
+                        ЗАКРЫТЬ
+                    </button>
                 </div>
             `;
             document.body.appendChild(modal);
+
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                const timerDisplay = document.getElementById('help-timer');
+                
+                if (timerDisplay) {
+                    timerDisplay.textContent = 
+                        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    
+                    if (timeLeft <= 60) {
+                        timerDisplay.style.color = '#ff4444';
+                        timerDisplay.style.animation = 'pulse 1s infinite';
+                    } else if (timeLeft <= 300) {
+                        timerDisplay.style.color = '#ffaa00';
+                    }
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(helpTimerInterval);
+                    helpTimerInterval = null;
+                    if (timerDisplay) {
+                        timerDisplay.textContent = 'ГОТОВО!';
+                        timerDisplay.style.color = '#00ff88';
+                    }
+                }
+                
+                timeLeft--;
+            }
+
+            updateTimer();
+            helpTimerInterval = setInterval(updateTimer, 1000);
+
+            const closeBtn = modal.querySelector('#close-help');
+            closeBtn.addEventListener('click', () => {
+                if (helpTimerInterval) {
+                    clearInterval(helpTimerInterval);
+                    helpTimerInterval = null;
+                }
+                modal.remove();
+            });
+
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
+                if (e.target === modal) {
+                    if (helpTimerInterval) {
+                        clearInterval(helpTimerInterval);
+                        helpTimerInterval = null;
+                    }
+                    modal.remove();
+                }
             });
         }
 
@@ -965,24 +1099,28 @@
             popup.innerHTML = `
                 <div class="modal" style="text-align:center;">
                     <div style="font-size:40px;">${emoji}</div>
-                    <h3 style="color: var(--gold);">${title}</h3>
-                    <p style="font-size:13px;">${message}</p>
-                    <button class="btn btn-gold btn-sm" style="margin-top:12px;" onclick="this.closest('.modal-overlay').remove()">OK</button>
+                    <h3 style="color: var(--gold); margin:8px 0;">${title}</h3>
+                    <p style="font-size:13px; line-height:1.4;">${message}</p>
+                    <button class="btn btn-gold btn-sm" style="margin-top:12px;" 
+                            onclick="this.closest('.modal-overlay').remove()">OK</button>
                 </div>
             `;
             document.body.appendChild(popup);
+            
+            const closeBtn = popup.querySelector('button');
+            closeBtn.addEventListener('click', () => popup.remove());
+            
             popup.addEventListener('click', (e) => {
                 if (e.target === popup) popup.remove();
             });
         }
 
-        // ==================== ДОСТИЖЕНИЯ ====================
         function checkAchievements() {
             const milestones = [10, 20, 30, 40, 50, 60];
             const icons = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '💎', 50: '🔥', 60: '👑' };
             const completedDays = appData.currentAttempt?.completedDays?.length || 0;
 
-                       milestones.forEach(m => {
+            milestones.forEach(m => {
                 if (completedDays >= m && !appData.achievements[m]) {
                     appData.achievements[m] = new Date().toISOString();
                     showPopup(icons[m], `Достижение разблокировано!`, `${m} дней пройдено!`);
@@ -1063,7 +1201,6 @@
             });
         }
 
-        // ==================== ИСТОРИЯ ====================
         function renderHistory() {
             const container = document.getElementById('history-list');
 
@@ -1100,7 +1237,6 @@
             });
         }
 
-        // ==================== ИИ ПРОМПТЫ ====================
         function copyPrompt(type) {
             let text = '';
 
@@ -1117,7 +1253,6 @@
             });
         }
 
-        // ==================== НАСТРОЙКИ ====================
         function toggleTheme() {
             const toggle = document.getElementById('theme-toggle');
             if (toggle.checked) {
@@ -1160,9 +1295,7 @@
             showPopup('🔔', 'Сохранено!', 'Настройки уведомлений обновлены');
         }
 
-        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         function initApp() {
-            // Применяем тему
             if (appData.theme === 'light') {
                 document.body.classList.add('light-theme');
                 document.getElementById('theme-toggle').checked = true;
@@ -1172,24 +1305,20 @@
                 }
             }
 
-            // Применяем язык
             if (appData.language === 'en') {
                 document.getElementById('lang-label').textContent = 'English';
             }
 
-            // Загружаем настройки уведомлений
             if (appData.notifications) {
                 document.getElementById('notify-hour').value = appData.notifications.hour || 9;
                 document.getElementById('notify-minute').value = appData.notifications.minute || 0;
                 document.getElementById('timezone').value = appData.notifications.timezone || 'Europe/Moscow';
             }
 
-            // Начальный рендер
             updateStats();
             renderAchievements();
         }
 
-        // Запуск приложения
         initApp();
     </script>
 </body>
