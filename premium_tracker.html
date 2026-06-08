@@ -245,6 +245,12 @@
             pointer-events: none;
         }
 
+        .day-cell.missed {
+            border: 2px dashed var(--gold);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
             50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
@@ -789,7 +795,7 @@
 
         function loadData() {
             try {
-                const saved = localStorage.getItem('premium_tracker_60_v4');
+                const saved = localStorage.getItem('premium_tracker_60_v5');
                 return saved ? { ...DEFAULT_DATA, ...JSON.parse(saved) } : { ...DEFAULT_DATA };
             } catch (e) {
                 return { ...DEFAULT_DATA };
@@ -797,7 +803,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('premium_tracker_60_v4', JSON.stringify(appData));
+            localStorage.setItem('premium_tracker_60_v5', JSON.stringify(appData));
         }
 
         document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -850,7 +856,11 @@
             document.getElementById('best-streak').textContent = appData.bestStreak;
             document.getElementById('total-attempts').textContent = appData.attemptsHistory.length;
 
-            updateSmartWarning(completed);
+            const maxCompletedDay = appData.currentAttempt?.completedDays?.length > 0 
+                ? Math.max(...appData.currentAttempt.completedDays) 
+                : 0;
+            
+            updateSmartWarning(maxCompletedDay);
             renderTrackerGrid();
             checkAchievements();
             saveData();
@@ -860,7 +870,8 @@
             const grid = document.getElementById('days-grid');
             grid.innerHTML = '';
             const completedDays = appData.currentAttempt?.completedDays || [];
-            const currentDay = completedDays.length + 1;
+            const maxCompleted = completedDays.length > 0 ? Math.max(...completedDays) : 0;
+            const currentDay = maxCompleted + 1;
             const startDay = appData.currentPage === 0 ? 1 : 31;
             const endDay = appData.currentPage === 0 ? 30 : 60;
 
@@ -873,15 +884,25 @@
                     cell.classList.add('completed');
                 } else if (i === currentDay && appData.currentAttempt) {
                     cell.classList.add('current');
+                } else if (i < currentDay && appData.currentAttempt && !completedDays.includes(i)) {
+                    cell.classList.add('missed');
                 } else if (i > currentDay) {
                     cell.classList.add('locked');
                 }
 
                 cell.addEventListener('click', () => {
                     if (completedDays.includes(i)) {
+                        // Уже выполненный день - показываем цитату
                         showPopup('✅', `День ${i}`, quotes[i] || 'Отличная работа!');
                     } else if (i === currentDay && appData.currentAttempt) {
+                        // Текущий день - отмечаем как обычно
                         completeDay();
+                    } else if (i < currentDay && appData.currentAttempt) {
+                        // Пропущенный день - предлагаем отметить
+                        showPastDayPopup(i);
+                    } else {
+                        // Будущий день - нельзя отметить
+                        showPopup('🔒', `День ${i}`, 'Этот день ещё не наступил');
                     }
                 });
 
@@ -909,8 +930,8 @@
             else if (day <= 40) warningEl.textContent = messages.second;
             else if (day <= 60) warningEl.textContent = messages.finish;
             else warningEl.textContent = '👑 Путь завершён!';
-            }
-        
+        }
+
         function completeDay() {
             if (!appData.currentAttempt) {
                 appData.currentAttempt = {
@@ -919,7 +940,10 @@
                 };
             }
 
-            const nextDay = appData.currentAttempt.completedDays.length + 1;
+            const nextDay = (appData.currentAttempt.completedDays.length > 0 
+                ? Math.max(...appData.currentAttempt.completedDays) 
+                : 0) + 1;
+            
             if (nextDay > 60) {
                 showPopup('👑', 'Поздравляем!', 'Вы завершили 60 дней!');
                 return;
@@ -935,6 +959,7 @@
 
             if (!appData.currentAttempt.completedDays.includes(nextDay)) {
                 appData.currentAttempt.completedDays.push(nextDay);
+                appData.currentAttempt.completedDays.sort((a, b) => a - b);
                 appData.currentAttempt.lastCompletedDate = today;
                 appData.totalDays++;
                 appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
@@ -948,6 +973,77 @@
                 const quote = quotes[nextDay] || 'Продолжай в том же духе!';
                 showPopup('✅', `День ${nextDay}`, quote);
             }
+        }
+
+        function showPastDayPopup(day) {
+            const popup = document.createElement('div');
+            popup.className = 'modal-overlay';
+            popup.innerHTML = `
+                <div class="modal" style="text-align:center;">
+                    <div style="font-size:40px;">📅</div>
+                    <h3 style="color: var(--gold); margin:8px 0;">День ${day} пропущен</h3>
+                    <p style="font-size:13px; margin:10px 0;">Хотите отметить этот день как выполненный?</p>
+                    <div style="display:flex; gap:8px; margin-top:12px;">
+                        <button class="btn btn-outline btn-sm" style="flex:1;" 
+                                onclick="this.closest('.modal-overlay').remove()">ОТМЕНА</button>
+                        <button class="btn btn-gold btn-sm" style="flex:1;" 
+                                onclick="completePastDay(${day}); this.closest('.modal-overlay').remove();">✅ ОТМЕТИТЬ</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+            
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) popup.remove();
+            });
+        }
+
+        function completePastDay(day) {
+            if (!appData.currentAttempt) {
+                appData.currentAttempt = {
+                    startDate: new Date().toISOString(),
+                    completedDays: []
+                };
+            }
+            
+            // Проверяем, что день не выполнен
+            if (appData.currentAttempt.completedDays.includes(day)) {
+                showPopup('⚠️', 'Уже выполнено', `День ${day} уже отмечен`);
+                return;
+            }
+            
+            // Проверяем, что день не в будущем
+            const maxCompleted = appData.currentAttempt.completedDays.length > 0 
+                ? Math.max(...appData.currentAttempt.completedDays) 
+                : 0;
+            const currentDay = maxCompleted + 1;
+            
+            if (day > currentDay) {
+                showPopup('🔒', 'Недоступно', `День ${day} ещё не наступил`);
+                return;
+            }
+            
+            // Добавляем день в completedDays
+            appData.currentAttempt.completedDays.push(day);
+            
+            // Сортируем по возрастанию
+            appData.currentAttempt.completedDays.sort((a, b) => a - b);
+            
+            // Обновляем статистику
+            appData.totalDays++;
+            appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
+            
+            // Автоматически переключаем на вторую страницу если нужно
+            if (day > 30 && appData.currentPage === 0) {
+                appData.currentPage = 1;
+            }
+            
+            // Обновляем интерфейс
+            updateStats();
+            
+            // Показываем цитату для этого дня
+            const quote = quotes[day] || 'Продолжай в том же духе!';
+            showPopup('✅', `День ${day} отмечен!`, quote);
         }
 
         function failDay() {
