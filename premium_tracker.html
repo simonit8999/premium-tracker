@@ -909,7 +909,7 @@
             else if (day <= 40) warningEl.textContent = messages.second;
             else if (day <= 60) warningEl.textContent = messages.finish;
             else warningEl.textContent = '👑 Путь завершён!';
-               function completeDay() {
+        function completeDay() {
             if (!appData.currentAttempt) {
                 appData.currentAttempt = {
                     startDate: new Date().toISOString(),
