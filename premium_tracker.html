@@ -139,7 +139,7 @@
             flex: 1;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            padding-bottom: 70px;
+            padding-bottom: 90px;
         }
 
         .screen {
@@ -416,44 +416,151 @@
             font-family: monospace;
         }
 
+        /* ПРЕМИАЛЬНАЯ НАВИГАЦИЯ */
         .nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--surface);
-            border-top: var(--border-gold);
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 16px);
+            max-width: 464px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-top: none;
             display: flex;
             justify-content: space-around;
-            padding: 6px 0;
+            padding: 8px 4px;
             z-index: 100;
-            max-width: 480px;
-            margin: 0 auto;
-            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                0 2px 8px rgba(255, 215, 0, 0.1),
+                inset 0 1px 0 rgba(255, 215, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 215, 0, 0.2) 20%, 
+                rgba(255, 215, 0, 0.6) 50%, 
+                rgba(255, 215, 0, 0.2) 80%, 
+                transparent 100%
+            );
+        }
+
+        .nav::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            right: 30px;
+            height: 10px;
+            background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
         }
 
         .nav-btn {
-            background: none;
+            background: transparent;
             border: none;
-            color: var(--text-secondary);
+            color: rgba(160, 160, 160, 0.7);
             font-size: 10px;
-            padding: 4px 8px;
-            border-radius: 10px;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 14px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
+            gap: 4px;
+            position: relative;
+            min-width: 60px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-btn:hover {
+            color: var(--gold);
+            background: rgba(255, 215, 0, 0.08);
+            transform: translateY(-2px);
         }
 
         .nav-btn.active {
-            color: var(--gold);
-            background: rgba(255, 215, 0, 0.1);
+            color: #000;
+            background: var(--gradient-gold);
+            font-weight: 700;
+            box-shadow: 
+                0 4px 15px rgba(255, 215, 0, 0.4),
+                0 2px 4px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            animation: navPulse 2s infinite;
+        }
+
+        @keyframes navPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 4px 15px rgba(255, 215, 0, 0.4),
+                    0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 6px 25px rgba(255, 215, 0, 0.6),
+                    0 2px 8px rgba(0, 0, 0, 0.4);
+            }
         }
 
         .nav-emoji {
-            font-size: 18px;
+            font-size: 22px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0));
+        }
+
+        .nav-btn.active .nav-emoji {
+            filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
+            transform: scale(1.1);
+        }
+
+        .nav-btn:hover .nav-emoji {
+            filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5));
+            transform: scale(1.05);
+        }
+
+        .light-theme .nav {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 2px 8px rgba(184, 134, 11, 0.1),
+                inset 0 1px 0 rgba(184, 134, 11, 0.05);
+        }
+
+        .light-theme .nav::before {
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(184, 134, 11, 0.2) 20%, 
+                rgba(184, 134, 11, 0.5) 50%, 
+                rgba(184, 134, 11, 0.2) 80%, 
+                transparent 100%
+            );
+        }
+
+        .light-theme .nav-btn {
+            color: rgba(100, 100, 100, 0.7);
+        }
+
+        .light-theme .nav-btn:hover {
+            background: rgba(184, 134, 11, 0.08);
+        }
+
+        .light-theme .nav-btn.active {
+            background: linear-gradient(135deg, #B8860B, #DAA520);
+            color: #fff;
         }
 
         .setting-block {
@@ -795,7 +902,7 @@
 
         function loadData() {
             try {
-                const saved = localStorage.getItem('premium_tracker_60_v5');
+                const saved = localStorage.getItem('premium_tracker_60_v6');
                 return saved ? { ...DEFAULT_DATA, ...JSON.parse(saved) } : { ...DEFAULT_DATA };
             } catch (e) {
                 return { ...DEFAULT_DATA };
@@ -803,7 +910,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('premium_tracker_60_v5', JSON.stringify(appData));
+            localStorage.setItem('premium_tracker_60_v6', JSON.stringify(appData));
         }
 
         document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -892,16 +999,12 @@
 
                 cell.addEventListener('click', () => {
                     if (completedDays.includes(i)) {
-                        // Уже выполненный день - показываем цитату
                         showPopup('✅', `День ${i}`, quotes[i] || 'Отличная работа!');
                     } else if (i === currentDay && appData.currentAttempt) {
-                        // Текущий день - отмечаем как обычно
                         completeDay();
                     } else if (i < currentDay && appData.currentAttempt) {
-                        // Пропущенный день - предлагаем отметить
                         showPastDayPopup(i);
                     } else {
-                        // Будущий день - нельзя отметить
                         showPopup('🔒', `День ${i}`, 'Этот день ещё не наступил');
                     }
                 });
@@ -1006,13 +1109,11 @@
                 };
             }
             
-            // Проверяем, что день не выполнен
             if (appData.currentAttempt.completedDays.includes(day)) {
                 showPopup('⚠️', 'Уже выполнено', `День ${day} уже отмечен`);
                 return;
             }
             
-            // Проверяем, что день не в будущем
             const maxCompleted = appData.currentAttempt.completedDays.length > 0 
                 ? Math.max(...appData.currentAttempt.completedDays) 
                 : 0;
@@ -1023,25 +1124,17 @@
                 return;
             }
             
-            // Добавляем день в completedDays
             appData.currentAttempt.completedDays.push(day);
-            
-            // Сортируем по возрастанию
             appData.currentAttempt.completedDays.sort((a, b) => a - b);
-            
-            // Обновляем статистику
             appData.totalDays++;
             appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
             
-            // Автоматически переключаем на вторую страницу если нужно
             if (day > 30 && appData.currentPage === 0) {
                 appData.currentPage = 1;
             }
             
-            // Обновляем интерфейс
             updateStats();
             
-            // Показываем цитату для этого дня
             const quote = quotes[day] || 'Продолжай в том же духе!';
             showPopup('✅', `День ${day} отмечен!`, quote);
         }
