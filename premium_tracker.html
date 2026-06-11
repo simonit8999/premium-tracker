@@ -1392,25 +1392,35 @@
                 const reason = modal.querySelector('#fail-reason').value || 'Не указана';
                 const completed = appData.currentAttempt.completedDays.length;
                 const maxDay = completed > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0;
-                const failDay = maxDay + 1;
+                const failDayNum = maxDay + 1;
                 
                 // Добавляем день срыва в forgedDays
                 if (!appData.forgedDays) appData.forgedDays = [];
-                if (failDay <= 60 && !appData.forgedDays.includes(failDay)) {
-                    appData.forgedDays.push(failDay);
+                if (failDayNum <= 60 && !appData.forgedDays.includes(failDayNum)) {
+                    appData.forgedDays.push(failDayNum);
                 }
                 
+                // Сохраняем старую попытку в историю
                 appData.attemptsHistory.push({
                     startDate: appData.currentAttempt.startDate,
                     endDate: new Date().toISOString(),
                     daysCompleted: completed,
                     reason: reason
                 });
-                appData.currentAttempt = null;
-                appData.currentPage = 0;
+                
+                // СОХРАНЯЕМ completedDays — не сбрасываем!
+                const savedDays = [...appData.currentAttempt.completedDays];
+                
+                // Начинаем новую попытку, но с сохранёнными днями
+                appData.currentAttempt = {
+                    startDate: new Date().toISOString(),
+                    completedDays: savedDays
+                };
+                
+                appData.currentPage = failDayNum > 30 ? 1 : 0;
                 updateStats();
                 modal.remove();
-                showPopup('⚔️', `День ${failDay}`, 'Боевое крещение. Ты упал — ты встал. Шрам закалки.\n\nНе сдавайся! Начни заново!');
+                showPopup('⚔️', `День ${failDayNum}`, 'Боевое крещение. Ты упал — ты встал. Шрам закалки.\n\nПрогресс сохранён. Продолжай дальше!');
             });
 
             modal.addEventListener('click', (e) => {
