@@ -18,6 +18,7 @@
             --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
             --border-gold: 1px solid var(--gold);
             --transition: 0.2s ease;
+            --forged: #3a3a3a;
         }
 
         .light-theme {
@@ -90,6 +91,47 @@
             100% { transform: translateY(-100vh) scale(1); opacity: 0; }
         }
 
+        @keyframes shimmer {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        @keyframes shimmer-bar {
+            100% { left: 100%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        @keyframes navPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cellPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 5px rgba(255,215,0,0.2); }
+            50% { transform: scale(1.06); box-shadow: 0 0 15px rgba(255,215,0,0.5); }
+        }
+
+        @keyframes victoryFlash {
+            0% { opacity: 0; transform: scale(0.95); }
+            30% { opacity: 1; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .app-container {
             position: relative;
             z-index: 1;
@@ -120,11 +162,6 @@
             box-shadow: var(--shadow-gold);
         }
 
-        @keyframes shimmer {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
         .logo {
             font-size: 24px;
             font-weight: 800;
@@ -151,11 +188,6 @@
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .card {
             background: var(--surface);
             border: var(--border-gold);
@@ -163,6 +195,11 @@
             padding: 12px;
             margin: 8px 0;
             box-shadow: var(--shadow-gold);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
         }
 
         .progress-container {
@@ -176,11 +213,12 @@
 
         .progress-bar {
             height: 100%;
-            background: var(--gradient-gold);
             border-radius: 8px;
-            transition: width 0.4s ease;
+            transition: width 0.4s ease, background 0.5s ease;
             position: relative;
             overflow: hidden;
+            background-size: 200% 100%;
+            animation: shimmer-bar 2s infinite;
         }
 
         .progress-bar::after {
@@ -192,10 +230,6 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             animation: shimmer-bar 2s infinite;
-        }
-
-        @keyframes shimmer-bar {
-            100% { left: 100%; }
         }
 
         .days-section {
@@ -221,23 +255,47 @@
             font-weight: 700;
             font-size: 12px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             background: var(--surface);
             border: 1px solid #333;
             color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-cell:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            z-index: 10;
+        }
+
+        .day-cell:active {
+            transform: scale(0.9);
         }
 
         .day-cell.completed {
-            background: var(--gradient-gold);
-            color: #000;
-            border-color: var(--gold);
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, #2e7d32, #4caf50, #2e7d32);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            color: #fff;
+            border-color: #4caf50;
+            box-shadow: 0 0 12px rgba(76, 175, 80, 0.5);
+        }
+
+        .day-cell.completed:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
         }
 
         .day-cell.current {
             border: 2px solid var(--gold);
-            animation: pulse 2s infinite;
+            animation: pulse 2s infinite, cellPulse 3s ease-in-out infinite;
             color: var(--gold);
+        }
+
+        .day-cell.current:hover {
+            transform: scale(1.12);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
         }
 
         .day-cell.locked {
@@ -251,9 +309,94 @@
             cursor: pointer;
         }
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
-            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        .day-cell.missed:hover {
+            opacity: 1;
+            transform: scale(1.08);
+        }
+
+        /* ========== СЕРАЯ КЛЕТКА СРЫВА ========== */
+        .day-cell.forged {
+            background: var(--forged);
+            color: #888;
+            border: 1px solid #555;
+            font-size: 12px;
+        }
+
+        .day-cell.forged:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(136, 136, 136, 0.3);
+        }
+
+        /* ========== ТРЕЩИНА ========== */
+        .day-cell.forged::after {
+            content: '';
+            position: absolute;
+            top: 15%; left: 45%;
+            width: 2px;
+            height: 70%;
+            background: rgba(0, 0, 0, 0.5);
+            transform: rotate(15deg);
+            box-shadow: 
+                3px -2px 0 rgba(0, 0, 0, 0.3),
+                -2px 4px 0 rgba(0, 0, 0, 0.3),
+                5px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* ========== ЗЕЛЁНЫЙ ЭКРАН ПОБЕДЫ ========== */
+        .victory-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #0a2e0a;
+            z-index: 5000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
+            animation: victoryFlash 0.4s ease;
+        }
+
+        .victory-day {
+            font-size: 1rem;
+            color: #4caf50;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .victory-quote {
+            font-size: 1.4rem;
+            color: #ffffff;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 40px;
+            max-width: 320px;
+        }
+
+        .victory-btn {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+            transform: scale(1);
+        }
+
+        .victory-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.7);
+        }
+
+        .victory-btn:active {
+            transform: scale(0.95);
         }
 
         .nav-arrow {
@@ -275,6 +418,7 @@
         .nav-arrow:hover {
             background: var(--gold);
             color: #000;
+            transform: scale(1.1);
         }
 
         .nav-arrow.disabled {
@@ -302,12 +446,25 @@
             background: var(--surface);
             border-radius: 12px;
             border: 1px solid var(--gold-dark);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--gold);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.15);
         }
 
         .stat-value {
             font-size: 18px;
             font-weight: 800;
             color: var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover .stat-value {
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
         }
 
         .stat-label {
@@ -323,6 +480,7 @@
             margin: 6px 0;
             font-size: 12px;
             color: var(--gold);
+            transition: all 0.3s ease;
         }
 
         .btn {
@@ -331,12 +489,21 @@
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             border: none;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             justify-content: center;
+            transform: scale(1);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
         }
 
         .btn-gold {
@@ -345,8 +512,8 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         }
 
-        .btn-gold:active {
-            transform: scale(0.95);
+        .btn-gold:hover {
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
         }
 
         .btn-danger {
@@ -354,10 +521,18 @@
             color: white;
         }
 
+        .btn-danger:hover {
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+        }
+
         .btn-outline {
             background: transparent;
             border: 1px solid var(--gold);
             color: var(--gold);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 215, 0, 0.1);
         }
 
         .btn-sm {
@@ -416,7 +591,6 @@
             font-family: monospace;
         }
 
-        /* ПРЕМИАЛЬНАЯ НАВИГАЦИЯ */
         .nav {
             position: fixed;
             bottom: 8px;
@@ -503,19 +677,6 @@
             animation: navPulse 2s infinite;
         }
 
-        @keyframes navPulse {
-            0%, 100% {
-                box-shadow: 
-                    0 4px 15px rgba(255, 215, 0, 0.4),
-                    0 2px 4px rgba(0, 0, 0, 0.3);
-            }
-            50% {
-                box-shadow: 
-                    0 6px 25px rgba(255, 215, 0, 0.6),
-                    0 2px 8px rgba(0, 0, 0, 0.4);
-            }
-        }
-
         .nav-emoji {
             font-size: 22px;
             transition: all 0.3s ease;
@@ -569,6 +730,12 @@
             background: var(--surface);
             border: 1px solid var(--gold-dark);
             border-radius: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .setting-block:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
         }
 
         .setting-block h3 {
@@ -639,6 +806,13 @@
             color: var(--text);
             border: 1px solid #333;
             font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .link-item:hover {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.05);
+            transform: translateX(3px);
         }
 
         .link-item:active {
@@ -652,6 +826,11 @@
             border-radius: 8px;
             border-left: 3px solid var(--gold);
             font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .help-step:hover {
+            background: rgba(255, 215, 0, 0.1);
         }
 
         select, input[type="number"] {
@@ -661,6 +840,11 @@
             border-radius: 8px;
             padding: 6px 8px;
             font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        select:hover, input[type="number"]:hover {
+            border-color: var(--gold);
         }
     </style>
 </head>
@@ -801,7 +985,7 @@
         <button class="nav-btn" data-screen="settings">
             <span class="nav-emoji">⚙</span> Настройки
         </button>
-    </nav>
+            </nav>
 
     <script>
         const tg = window.Telegram?.WebApp;
@@ -895,22 +1079,27 @@
             theme: 'dark',
             language: 'ru',
             notifications: { hour: 9, minute: 0, timezone: 'Europe/Moscow' },
-            currentPage: 0
+            currentPage: 0,
+            forgedDays: []
         };
 
         let appData = loadData();
 
         function loadData() {
             try {
-                const saved = localStorage.getItem('premium_tracker_60_v6');
-                return saved ? { ...DEFAULT_DATA, ...JSON.parse(saved) } : { ...DEFAULT_DATA };
+                const saved = localStorage.getItem('premium_tracker_60_v7');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    return { ...DEFAULT_DATA, ...data };
+                }
+                return { ...DEFAULT_DATA };
             } catch (e) {
                 return { ...DEFAULT_DATA };
             }
         }
 
         function saveData() {
-            localStorage.setItem('premium_tracker_60_v6', JSON.stringify(appData));
+            localStorage.setItem('premium_tracker_60_v7', JSON.stringify(appData));
         }
 
         document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -957,7 +1146,18 @@
             const completed = appData.currentAttempt?.completedDays?.length || 0;
             const percent = Math.round((completed / 60) * 100);
 
-            document.getElementById('progress-bar').style.width = percent + '%';
+            const bar = document.getElementById('progress-bar');
+            bar.style.width = percent + '%';
+            
+            // Градиент прогресс-бара
+            if (percent <= 20) {
+                bar.style.background = 'linear-gradient(90deg, #8B4513, #A0522D)';
+            } else if (percent <= 50) {
+                bar.style.background = 'linear-gradient(90deg, #71797E, #8B8D91)';
+            } else {
+                bar.style.background = 'linear-gradient(90deg, #FFD700, #FFA500)';
+            }
+            
             document.getElementById('progress-text').textContent = percent + '% завершено';
             document.getElementById('total-days').textContent = appData.totalDays;
             document.getElementById('best-streak').textContent = appData.bestStreak;
@@ -977,6 +1177,7 @@
             const grid = document.getElementById('days-grid');
             grid.innerHTML = '';
             const completedDays = appData.currentAttempt?.completedDays || [];
+            const forgedDays = appData.forgedDays || [];
             const maxCompleted = completedDays.length > 0 ? Math.max(...completedDays) : 0;
             const currentDay = maxCompleted + 1;
             const startDay = appData.currentPage === 0 ? 1 : 31;
@@ -989,9 +1190,11 @@
 
                 if (completedDays.includes(i)) {
                     cell.classList.add('completed');
+                } else if (forgedDays.includes(i)) {
+                    cell.classList.add('forged');
                 } else if (i === currentDay && appData.currentAttempt) {
                     cell.classList.add('current');
-                } else if (i < currentDay && appData.currentAttempt && !completedDays.includes(i)) {
+                } else if (i < currentDay && appData.currentAttempt && !completedDays.includes(i) && !forgedDays.includes(i)) {
                     cell.classList.add('missed');
                 } else if (i > currentDay) {
                     cell.classList.add('locked');
@@ -1000,6 +1203,8 @@
                 cell.addEventListener('click', () => {
                     if (completedDays.includes(i)) {
                         showPopup('✅', `День ${i}`, quotes[i] || 'Отличная работа!');
+                    } else if (forgedDays.includes(i)) {
+                        showPopup('⚔️', `День ${i}`, 'Боевое крещение. Ты упал — ты встал. Шрам закалки.');
                     } else if (i === currentDay && appData.currentAttempt) {
                         completeDay();
                     } else if (i < currentDay && appData.currentAttempt) {
@@ -1035,6 +1240,24 @@
             else warningEl.textContent = '👑 Путь завершён!';
         }
 
+        // ========== ЗЕЛЁНЫЙ ЭКРАН ПОБЕДЫ ==========
+        function showVictoryScreen(day, quote) {
+            const overlay = document.createElement('div');
+            overlay.className = 'victory-overlay';
+            overlay.innerHTML = `
+                <div class="victory-day">ДЕНЬ ${day}</div>
+                <div class="victory-quote">${quote}</div>
+                <button class="victory-btn">ПРОДОЛЖИТЬ</button>
+            `;
+            document.body.appendChild(overlay);
+            
+            overlay.querySelector('.victory-btn').onclick = () => {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => overlay.remove(), 300);
+            };
+        }
+
         function completeDay() {
             if (!appData.currentAttempt) {
                 appData.currentAttempt = {
@@ -1067,6 +1290,9 @@
                 appData.totalDays++;
                 appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
                 
+                // Убираем из forgedDays если был срыв
+                appData.forgedDays = (appData.forgedDays || []).filter(d => d !== nextDay);
+                
                 if (nextDay > 30 && appData.currentPage === 0) {
                     appData.currentPage = 1;
                 }
@@ -1074,7 +1300,7 @@
                 updateStats();
                 
                 const quote = quotes[nextDay] || 'Продолжай в том же духе!';
-                showPopup('✅', `День ${nextDay}`, quote);
+                showVictoryScreen(nextDay, quote);
             }
         }
 
@@ -1129,6 +1355,9 @@
             appData.totalDays++;
             appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
             
+            // Убираем из forgedDays
+            appData.forgedDays = (appData.forgedDays || []).filter(d => d !== day);
+            
             if (day > 30 && appData.currentPage === 0) {
                 appData.currentPage = 1;
             }
@@ -1136,7 +1365,7 @@
             updateStats();
             
             const quote = quotes[day] || 'Продолжай в том же духе!';
-            showPopup('✅', `День ${day} отмечен!`, quote);
+            showVictoryScreen(day, quote);
         }
 
         function failDay() {
@@ -1162,6 +1391,15 @@
             modal.querySelector('#save-fail').addEventListener('click', () => {
                 const reason = modal.querySelector('#fail-reason').value || 'Не указана';
                 const completed = appData.currentAttempt.completedDays.length;
+                const maxDay = completed > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0;
+                const failDay = maxDay + 1;
+                
+                // Добавляем день срыва в forgedDays
+                if (!appData.forgedDays) appData.forgedDays = [];
+                if (failDay <= 60 && !appData.forgedDays.includes(failDay)) {
+                    appData.forgedDays.push(failDay);
+                }
+                
                 appData.attemptsHistory.push({
                     startDate: appData.currentAttempt.startDate,
                     endDate: new Date().toISOString(),
@@ -1172,7 +1410,7 @@
                 appData.currentPage = 0;
                 updateStats();
                 modal.remove();
-                showPopup('💪', 'Попытка сохранена', 'Не сдавайся! Начни заново!');
+                showPopup('⚔️', `День ${failDay}`, 'Боевое крещение. Ты упал — ты встал. Шрам закалки.\n\nНе сдавайся! Начни заново!');
             });
 
             modal.addEventListener('click', (e) => {
@@ -1343,6 +1581,8 @@
                     background: var(--surface);
                     border: 1px solid ${appData.achievements[m] ? 'var(--gold)' : '#333'};
                     opacity: ${appData.achievements[m] ? '1' : '0.5'};
+                    transition: all 0.3s ease;
+                    cursor: default;
                 `;
 
                 if (appData.achievements[m]) {
@@ -1409,6 +1649,8 @@
                     border-radius: 12px;
                     padding: 12px;
                     margin: 6px 0;
+                    transition: all 0.3s ease;
+                    cursor: default;
                 `;
 
                 const startDate = new Date(attempt.startDate).toLocaleDateString('ru-RU');
