@@ -14,8 +14,10 @@
             --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
             --border-gold: 1px solid var(--gold);
             --stat-bg: #1a1a1a; --cell-bg: #1a1a1a; --cell-text: #888; --nav-bg: #0a0a0a;
+            --card-bg: #111111; --border-color: rgba(255,215,0,0.1);
+            --success-dark: #2e7d32; --success-light: #4caf50;
         }
-        .light-theme { --bg: #f5f0e8; --surface: #ffffff; --gold: #B8860B; --gold-dark: #8B6914; --text: #1a1a1a; --text-secondary: #666; --shadow-gold: 0 0 20px rgba(184,134,11,0.2); --stat-bg: #f0ece4; --cell-bg: #f0ece4; --nav-bg: #ffffff; }
+        .light-theme { --bg: #f5f0e8; --surface: #ffffff; --gold: #B8860B; --gold-dark: #8B6914; --text: #1a1a1a; --text-secondary: #666; --shadow-gold: 0 0 20px rgba(184,134,11,0.2); --stat-bg: #f0ece4; --cell-bg: #f0ece4; --nav-bg: #ffffff; --card-bg: #ffffff; }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; transition:0.2s ease; user-select:none; -webkit-user-select:none; }
         .main-content::-webkit-scrollbar,#history-list::-webkit-scrollbar,#achievements-list::-webkit-scrollbar,.modal::-webkit-scrollbar { display:none; }
@@ -31,6 +33,9 @@
         @keyframes cellPulse { 0%,100%{transform:scale(1);box-shadow:0 0 5px rgba(255,215,0,0.2);} 50%{transform:scale(1.06);box-shadow:0 0 15px rgba(255,215,0,0.5);} }
         @keyframes victoryFlash { 0%{opacity:0;transform:scale(0.95);} 30%{opacity:1;transform:scale(1);} 100%{opacity:1;transform:scale(1);} }
         @keyframes gradientShift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+        @keyframes glowGreen { 0%,100%{box-shadow:0 0 5px #4caf50;} 50%{box-shadow:0 0 20px #4caf50,0 0 30px rgba(76,175,80,0.5);} }
+        @keyframes glowRed { 0%,100%{box-shadow:0 0 5px #f44336;} 50%{box-shadow:0 0 20px #f44336,0 0 30px rgba(244,67,54,0.5);} }
+        @keyframes glowOrange { 0%,100%{box-shadow:0 0 5px #FF5722;} 50%{box-shadow:0 0 20px #FF5722,0 0 30px rgba(255,87,34,0.5);} }
         .app-container { position:relative; z-index:1; max-width:480px; margin:0 auto; height:100vh; display:flex; flex-direction:column; padding:8px 12px; }
         .header { text-align:center; padding:8px 0; flex-shrink:0; }
         .premium-badge { display:inline-block; background:var(--gradient-gold); color:#000; padding:4px 14px; border-radius:20px; font-weight:700; font-size:11px; letter-spacing:1px; animation:shimmer 2s infinite; box-shadow:var(--shadow-gold); }
@@ -78,8 +83,7 @@
         .btn:hover { transform:scale(1.05); } .btn:active { transform:scale(0.95); }
         .btn-gold { background:var(--gradient-gold); color:#000; box-shadow:0 0 15px rgba(255,215,0,0.4); }
         .btn-gold:hover { box-shadow:0 0 25px rgba(255,215,0,0.6); }
-        .btn-danger { background:var(--danger); color:white; }
-        .btn-danger:hover { box-shadow:0 0 20px rgba(255,68,68,0.5); }
+        .btn-danger { background:var(--danger); color:white; } .btn-danger:hover { box-shadow:0 0 20px rgba(255,68,68,0.5); }
         .btn-outline { background:transparent; border:1px solid var(--gold); color:var(--gold); }
         .btn-outline:hover { background:rgba(255,215,0,0.1); }
         .btn-sm { padding:6px 12px; font-size:11px; border-radius:15px; }
@@ -89,7 +93,6 @@
         .modal textarea { width:100%; padding:10px; border-radius:10px; border:1px solid var(--gold-dark); background:var(--bg); color:var(--text); resize:vertical; min-height:70px; margin:8px 0; }
         .timer-display { font-size:48px; font-weight:800; color:var(--gold); text-align:center; margin:10px 0; font-family:monospace; }
         .nav { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); width:calc(100% - 16px); max-width:464px; background:linear-gradient(180deg,#0a0a0a 0%,#111111 100%); border:1px solid rgba(255,215,0,0.3); display:flex; justify-content:space-around; padding:8px 4px; z-index:100; border-radius:20px; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.5),0 2px 8px rgba(255,215,0,0.1),inset 0 1px 0 rgba(255,215,0,0.05); }
-        .nav::before { content:''; position:absolute; top:0; left:20px; right:20px; height:1px; background:linear-gradient(90deg,transparent 0%,rgba(255,215,0,0.2) 20%,rgba(255,215,0,0.6) 50%,rgba(255,215,0,0.2) 80%,transparent 100%); }
         .nav-btn { background:transparent; border:none; color:rgba(160,160,160,0.7); font-size:10px; font-weight:600; padding:8px 12px; border-radius:14px; cursor:pointer; transition:all 0.3s; display:flex; flex-direction:column; align-items:center; gap:4px; min-width:60px; }
         .nav-btn:hover { color:var(--gold); background:rgba(255,215,0,0.08); transform:translateY(-2px); }
         .nav-btn.active { color:#000; background:var(--gradient-gold); font-weight:700; box-shadow:0 4px 15px rgba(255,215,0,0.4),0 2px 4px rgba(0,0,0,0.3); transform:translateY(-3px); animation:navPulse 2s infinite; }
@@ -106,31 +109,26 @@
         .link-item:hover { border-color:var(--gold); background:rgba(255,215,0,0.05); transform:translateX(3px); }
         .help-step { padding:8px; margin:4px 0; background:rgba(255,215,0,0.05); border-radius:8px; border-left:3px solid var(--gold); font-size:12px; }
         select,input[type="number"] { background:var(--bg); border:1px solid var(--gold-dark); color:var(--text); border-radius:8px; padding:6px 8px; font-size:12px; }
-        /* Заглушка */
         .paywall-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; padding:30px; text-align:center; }
         .paywall-logo { font-size:3rem; font-weight:900; background:var(--gradient-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:20px; }
         .paywall-title { color:var(--gold); font-size:1.2rem; font-weight:bold; margin-bottom:10px; }
         .paywall-text { color:var(--text-secondary); font-size:0.85rem; margin-bottom:30px; line-height:1.5; }
         .paywall-btn { background:var(--gradient-gold); color:#000; border:none; padding:14px 30px; border-radius:25px; font-weight:bold; font-size:1rem; cursor:pointer; }
-        .paywall-btn:active { transform:scale(0.95); }
         @media(min-width:600px){body{padding:20px;}.app-container{max-width:520px;}.day-cell{font-size:0.7rem;}.btn{padding:10px 18px;font-size:13px;}.stat-value{font-size:20px;}.grid{gap:4px;}}
     </style>
 </head>
 <body>
 <div class="bg-particles" id="particles"></div>
-
-<!-- ЗАГЛУШКА -->
 <div class="paywall-screen" id="paywallScreen" style="display:none;">
     <div class="paywall-logo">CHOICE</div>
     <div class="paywall-title">Доступ закрыт</div>
-    <div class="paywall-text">Для использования трекера необходимо оплатить доступ.<br>Выбери тариф и начни путь.</div>
+    <div class="paywall-text">Для использования трекера оплати доступ.<br>Выбери тариф и начни путь.</div>
     <button class="paywall-btn" onclick="window.open('https://t.me/Choice_on_Bot','_blank')">💎 Купить доступ</button>
 </div>
-
 <div class="app-container" id="appContainer">
     <div class="header">
-        <div class="premium-badge" id="planBadge">👑 PREMIUM</div>
-        <div class="logo" id="planLogo">👑 60 Дней</div>
+        <div class="premium-badge" id="planBadge">🎫 BASIC</div>
+        <div class="logo" id="planLogo">30 Дней</div>
     </div>
     <div class="main-content" id="main-content">
         <div class="screen active" id="screen-tracker">
@@ -152,550 +150,392 @@
             <div class="setting-block"><h3>🔔 Уведомления</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><input type="number" id="notify-hour" placeholder="Час" min="0" max="23" style="width:50px;"><span>:</span><input type="number" id="notify-minute" placeholder="Мин" min="0" max="59" style="width:50px;"><select id="timezone" style="flex:1;min-width:100px;"><option value="Europe/Moscow">Москва</option><option value="Europe/London">Лондон</option><option value="America/New_York">Нью-Йорк</option></select><button class="btn btn-gold btn-sm" onclick="saveNotificationSettings()">💾</button></div></div></div>
     </div>
 </div>
-<nav class="nav">
+<nav class="nav" id="bottomNav">
     <button class="nav-btn active" data-screen="tracker">📅 Трекер</button>
     <button class="nav-btn" data-screen="history">📋 История</button>
     <button class="nav-btn" data-screen="achievements">🏆 Достижения</button>
-    <button class="nav-btn" data-screen="ai">🤖 ИИ</button>
+    <button class="nav-btn" data-screen="ai" id="nav-ai">🤖 ИИ</button>
     <button class="nav-btn" data-screen="settings">⚙ Настройки</button>
 </nav>
+
 <script>
-    const tg = window.Telegram?.WebApp;
-    const isTelegram = !!tg;
-    if (isTelegram) {
-        tg.ready();
-        tg.expand();
-        tg.setHeaderColor('#0a0a0a');
-        tg.setBackgroundColor('#0a0a0a');
-    }
+const tg = window.Telegram?.WebApp;
+const isTelegram = !!tg;
+if (isTelegram) { tg.ready(); tg.expand(); tg.setHeaderColor('#0a0a0a'); tg.setBackgroundColor('#0a0a0a'); }
 
-    // Получаем user_id
-    let userId = null;
-    if (isTelegram && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        userId = tg.initDataUnsafe.user.id;
-    }
+let userId = null;
+if (isTelegram && tg.initDataUnsafe && tg.initDataUnsafe.user) userId = tg.initDataUnsafe.user.id;
 
-    const API_URL = 'https://choice-tracker-api.onrender.com';
-    let userPlan = 'none'; // none, basic, premium
-    const TOTAL_DAYS = 60; // максимум
+const API_URL = 'https://choice-tracker-api.onrender.com';
+let userPlan = 'none';
 
-    // Частицы
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-        particlesContainer.appendChild(particle);
-    }
+// Частицы
+const pc = document.getElementById('particles');
+for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div'); p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%'; p.style.animationDelay = Math.random() * 6 + 's';
+    p.style.animationDuration = (Math.random() * 4 + 4) + 's'; pc.appendChild(p);
+}
 
-    const quotes = {
-        1:"Первый день — самый простой. Не обманывай себя.",2:"Твой мозг ещё не понял, что ты серьёзно. Покажи ему.",3:"Три дня. Это больше, чем 90% мужчин. Но ты не они.",4:"Если тебе легко — ты делаешь что-то не так. Должно ломать.",5:"Пять дней. Твоя бывшая версия уже не узнала бы тебя.",6:"Триггеры не исчезли. Ты просто стал сильнее их замечать.",7:"Первая неделя — грязь. Ты прошёл её. Дальше — холод.",8:"Мозг захочет сделку. Не торгуйся.",9:"Сублимация — не терпи. Переплавляй похоть в действие.",10:"Десять дней. Дофаминовые рецепторы начали просыпаться.",11:"Не запрещай. Заменяй. Ты умнее своего инстинкта.",12:"Охлаждение — не шутка. Сделай. Прямо сейчас.",13:"Сон — твоя перезагрузка. Не кради её у себя.",14:"Две недели. Ты уже не тот, кем был 14 дней назад.",15:"Пик ломки. Если ты здесь — ты пройдёшь всё.",16:"Не проверяй 'а работает ли ещё'. Работает.",17:"Утренняя эрекция — не враг. Это знак восстановления.",18:"Эротический сон — не срыв. Твоё тело лечится.",19:"Энергия прёт. Не сиди. Делай. Сейчас.",20:"Женщины чувствуют твою силу. Не сливай её на первую встречную.",21:"Три недели. Ты перестроил нейронные сети. Гордись. Но не расслабляйся.",22:"Чувствительность вернулась. Теперь ты снова мужчина.",23:"Злость — это топливо. Сожги её в деле, а не в унитаз.",24:"Тестостерон на пике. Твой голос стал глубже.",25:"Люди тянутся к тебе. Ты стал магнитом.",26:"Осталось 4 дня. Ты не сдашься за четыре дня.",27:"Энергия переполняет. Это суперсила.",28:"Стресс — не оправдание. Стресс — это проверка.",29:"Один день. Ты прошёл 29. Не сломайся.",30:"Ты сделал выбор 30 раз. Ты — мужчина.",31:"Ты перевалил за половину. 30 дней назад ты сомневался. Сегодня — нет.",32:"Твой мозг перестроился на 70%. Старые триггеры больше не работают.",33:"Ты не лучше 99% мужчин. Ты лучше себя вчерашнего.",34:"Дофаминовая яма позади. Теперь реальность ярче любого экрана.",35:"Пять недель. Твой голос глубже, взгляд твёрже.",36:"Спроси себя: что изменилось за 36 дней? Запиши. Перечитай.",37:"Ты не борешься с собой. Ты управляешь собой.",38:"Вторая половина пути. Здесь идут единицы. Ты — один из них.",39:"Твоя энергия пугает окружающих.",40:"Сорок дней. Это больше чем многие мечтали. А ты — сделал.",41:"Сравни себя с днём 0. Тот парень не знал что способен на это.",42:"Ты переписал свои нейронные связи. Буквально.",43:"Женщины чувствуют твою силу. Не трать её на пустые разговоры.",44:"До конца две недели. Две недели — и ты докажешь себе всё.",45:"Твой тестостерон на историческом максимуме.",46:"Ты уже не тот кто начинал. Ты — версия 2.0.",47:"Срывы других — не твоя история.",48:"Последние дни. Мозг попытается договориться. Не слушай.",49:"Ты сделал выбор 49 раз. Ещё 11 — и ты закроешь этот гештальт.",50:"Пятьдесят. Ты на финишной прямой.",51:"Каждый день с 51 по 60 — это твой личный рекорд.",52:"Ты спокоен. Ты уверен. Ты управляешь желаниями.",53:"Осталась неделя. Семь дней отделяют тебя от победы.",54:"Твой сон глубокий. Твоя энергия стабильна.",55:"Пять дней. Не торгуйся. Не проверяй. Просто дойди.",56:"Ты молча делаешь то что другие обещают себе каждый понедельник.",57:"Три дня. Ты на пике. Не расслабляйся на финише.",58:"Предпоследний рывок. Самое сложное позади.",59:"Завтра — день 60. Ты уже победил.",60:"Ты сделал это. 60 дней. Ты — лучшая версия себя."
-    };
+const quotes = {
+1:"Первый день — самый простой.",2:"Твой мозг ещё не понял, что ты серьёзно.",3:"Три дня. Это больше, чем 90% мужчин.",4:"Если тебе легко — ты делаешь что-то не так.",5:"Пять дней. Твоя бывшая версия уже не узнала бы тебя.",6:"Триггеры не исчезли. Ты просто стал сильнее.",7:"Первая неделя — грязь. Ты прошёл её.",8:"Мозг захочет сделку. Не торгуйся.",9:"Сублимация — не терпи.",10:"Десять дней. Дофаминовые рецепторы начали просыпаться.",11:"Не запрещай. Заменяй.",12:"Охлаждение — не шутка.",13:"Сон — твоя перезагрузка.",14:"Две недели. Ты уже не тот.",15:"Пик ломки. Если ты здесь — ты пройдёшь всё.",16:"Не проверяй 'а работает ли ещё'. Работает.",17:"Утренняя эрекция — не враг.",18:"Эротический сон — не срыв.",19:"Энергия прёт. Не сиди.",20:"Женщины чувствуют твою силу.",21:"Три недели. Ты перестроил нейронные сети.",22:"Чувствительность вернулась.",23:"Злость — это топливо.",24:"Тестостерон на пике.",25:"Люди тянутся к тебе.",26:"Осталось 4 дня.",27:"Энергия переполняет.",28:"Стресс — не оправдание.",29:"Один день. Ты прошёл 29.",30:"Ты сделал выбор 30 раз. Ты — мужчина.",
+31:"Ты перевалил за половину.",32:"Твой мозг перестроился на 70%.",33:"Ты не лучше 99% мужчин. Ты лучше себя вчерашнего.",34:"Дофаминовая яма позади.",35:"Пять недель. Твой голос глубже.",36:"Спроси себя: что изменилось?",37:"Ты не борешься с собой. Ты управляешь собой.",38:"Вторая половина пути.",39:"Твоя энергия пугает окружающих.",40:"Сорок дней.",41:"Сравни себя с днём 0.",42:"Ты переписал свои нейронные связи.",43:"Женщины чувствуют твою силу.",44:"До конца две недели.",45:"Твой тестостерон на историческом максимуме.",46:"Ты уже не тот кто начинал.",47:"Срывы других — не твоя история.",48:"Последние дни. Не слушай.",49:"Ты сделал выбор 49 раз.",50:"Пятьдесят. Ты на финишной прямой.",51:"Каждый день с 51 по 60 — твой рекорд.",52:"Ты спокоен. Ты уверен.",53:"Осталась неделя.",54:"Твой сон глубокий.",55:"Пять дней. Не торгуйся.",56:"Ты молча делаешь то что другие обещают.",57:"Три дня. Ты на пике.",58:"Предпоследний рывок.",59:"Завтра — день 60.",60:"Ты сделал это. 60 дней."
+};
 
-    const DEFAULT_DATA = {
-        currentAttempt: null,
-        totalDays: 0,
-        bestStreak: 0,
-        attemptsHistory: [],
-        achievements: {},
-        theme: 'dark',
-        language: 'ru',
-        notifications: { hour: 9, minute: 0, timezone: 'Europe/Moscow' },
-        currentPage: 0,
-        forgedDays: []
-    };
+const DEFAULT_DATA = { currentAttempt: null, totalDays: 0, bestStreak: 0, attemptsHistory: [], achievements: {}, theme: 'dark', language: 'ru', notifications: { hour: 9, minute: 0, timezone: 'Europe/Moscow' }, currentPage: 0, forgedDays: [] };
+let appData = loadData();
 
-    let appData = loadData();
-
-    // ========== МИГРАЦИЯ СТАРЫХ ДАННЫХ ==========
-    function migrateOldData() {
-        // Проверяем старые ключи
-        const oldBasic = localStorage.getItem('choice_data_v3');
-        const oldBasic2 = localStorage.getItem('choice_basic_data');
-        const oldPremium = localStorage.getItem('premium_tracker_60_v7');
-        
-        if (oldBasic && !localStorage.getItem('choice_unified_v1')) {
-            try {
-                const data = JSON.parse(oldBasic);
-                const migrated = {
-                    ...DEFAULT_DATA,
-                    currentAttempt: data.currentAttempt || { startDate: new Date().toISOString(), completedDays: [] },
-                    totalDays: data.totalDays || 0,
-                    bestStreak: data.bestStreak || 0,
-                    attemptsHistory: data.attemptsHistory || [],
-                    forgedDays: data.forgedDays || []
-                };
+// ========== МИГРАЦИЯ ==========
+function migrateOldData() {
+    if (localStorage.getItem('choice_unified_v1')) return;
+    // Пробуем старые ключи по порядку
+    const keys = ['choice_basic_data', 'choice_data_v3', 'premium_tracker_60_v7'];
+    for (const key of keys) {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+                       try {
+                const data = JSON.parse(raw);
+                const migrated = { ...DEFAULT_DATA };
+                if (data.currentAttempt) migrated.currentAttempt = data.currentAttempt;
+                if (data.totalDays) migrated.totalDays = data.totalDays;
+                if (data.bestStreak) migrated.bestStreak = data.bestStreak;
+                if (data.attemptsHistory) migrated.attemptsHistory = data.attemptsHistory;
+                if (data.forgedDays) migrated.forgedDays = data.forgedDays;
+                if (data.achievements) migrated.achievements = data.achievements;
+                if (data.theme) migrated.theme = data.theme;
+                if (data.language) migrated.language = data.language;
+                if (data.notifications) migrated.notifications = data.notifications;
                 localStorage.setItem('choice_unified_v1', JSON.stringify(migrated));
-            } catch(e) {}
-        }
-        if (oldBasic2 && !localStorage.getItem('choice_unified_v1')) {
-            try {
-                const data = JSON.parse(oldBasic2);
-                const migrated = {
-                    ...DEFAULT_DATA,
-                    currentAttempt: data.currentAttempt || { startDate: new Date().toISOString(), completedDays: [] },
-                    totalDays: data.totalDays || 0,
-                    bestStreak: data.bestStreak || 0,
-                    attemptsHistory: data.attemptsHistory || [],
-                    forgedDays: data.forgedDays || []
-                };
-                localStorage.setItem('choice_unified_v1', JSON.stringify(migrated));
-            } catch(e) {}
-        }
-        if (oldPremium && !localStorage.getItem('choice_unified_v1')) {
-            try {
-                const data = JSON.parse(oldPremium);
-                const migrated = {
-                    ...DEFAULT_DATA,
-                    currentAttempt: data.currentAttempt || { startDate: new Date().toISOString(), completedDays: [] },
-                    totalDays: data.totalDays || 0,
-                    bestStreak: data.bestStreak || 0,
-                    attemptsHistory: data.attemptsHistory || [],
-                    achievements: data.achievements || {},
-                    forgedDays: data.forgedDays || [],
-                    theme: data.theme || 'dark',
-                    language: data.language || 'ru',
-                    notifications: data.notifications || { hour: 9, minute: 0, timezone: 'Europe/Moscow' }
-                };
-                localStorage.setItem('choice_unified_v1', JSON.stringify(migrated));
+                break;
             } catch(e) {}
         }
     }
+}
 
-    function loadData() {
-        migrateOldData();
-        try {
-            const saved = localStorage.getItem('choice_unified_v1');
-            if (saved) {
-                const data = JSON.parse(saved);
-                return { ...DEFAULT_DATA, ...data };
-            }
-            return { ...DEFAULT_DATA };
-        } catch (e) {
-            return { ...DEFAULT_DATA };
-        }
-    }
+function loadData() {
+    migrateOldData();
+    try {
+        const saved = localStorage.getItem('choice_unified_v1');
+        if (saved) return { ...DEFAULT_DATA, ...JSON.parse(saved) };
+        return { ...DEFAULT_DATA };
+    } catch(e) { return { ...DEFAULT_DATA }; }
+}
 
-    function saveData() {
-        localStorage.setItem('choice_unified_v1', JSON.stringify(appData));
-    }
+function saveData() { localStorage.setItem('choice_unified_v1', JSON.stringify(appData)); }
 
-    // ========== ПРОВЕРКА ДОСТУПА ==========
-    async function checkAccess() {
-        if (!userId) {
-            // Нет Telegram — показываем заглушку
-            showPaywall();
-            return;
-        }
-        
-        try {
-            const resp = await fetch(`${API_URL}/api/check-access/${userId}`);
-            const data = await resp.json();
-            userPlan = data.plan || 'none';
-            
-            if (userPlan === 'none') {
-                showPaywall();
-            } else {
-                document.getElementById('paywallScreen').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'flex';
-                
-                if (userPlan === 'basic') {
-                    document.getElementById('planBadge').textContent = '🎫 BASIC';
-                    document.getElementById('planBadge').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
-                    document.getElementById('planLogo').textContent = '30 Дней';
-                    // Скрываем ИИ и достижения для basic
-                    document.querySelector('.nav-btn[data-screen="ai"]').style.display = 'none';
-                    document.querySelector('.nav-btn[data-screen="achievements"]').style.display = 'none';
-                } else {
-                    document.getElementById('planBadge').textContent = '👑 PREMIUM';
-                    document.getElementById('planLogo').textContent = '👑 60 Дней';
-                }
-                
-                initApp();
-            }
-        } catch(e) {
-            // Если API недоступен — показываем трекер (оффлайн-режим)
+// ========== ПРОВЕРКА ДОСТУПА ==========
+async function checkAccess() {
+    if (!userId) { document.getElementById('paywallScreen').style.display = 'flex'; return; }
+    try {
+        const resp = await fetch(`${API_URL}/api/check-access/${userId}`);
+        const data = await resp.json();
+        userPlan = data.plan || 'none';
+        if (userPlan === 'none') {
+            document.getElementById('paywallScreen').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+        } else {
             document.getElementById('paywallScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'flex';
-            userPlan = 'basic';
+            if (userPlan === 'basic') {
+                document.getElementById('planBadge').textContent = '🎫 BASIC';
+                document.getElementById('planBadge').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+                document.getElementById('planLogo').textContent = '30 Дней';
+                document.getElementById('nav-ai').style.display = 'none';
+            } else {
+                document.getElementById('planBadge').textContent = '👑 PREMIUM';
+                document.getElementById('planLogo').textContent = '👑 60 Дней';
+                document.getElementById('nav-ai').style.display = 'flex';
+            }
             initApp();
         }
+    } catch(e) {
+        document.getElementById('paywallScreen').style.display = 'none';
+        document.getElementById('appContainer').style.display = 'flex';
+        userPlan = 'basic';
+        initApp();
     }
+}
 
-    function showPaywall() {
-        document.getElementById('paywallScreen').style.display = 'flex';
-        document.getElementById('appContainer').style.display = 'none';
-    }
-
-    // ========== НАВИГАЦИЯ ==========
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const screenName = btn.dataset.screen;
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(`screen-${screenName}`).classList.add('active');
-            if (screenName === 'history') renderHistory();
-            if (screenName === 'achievements') renderAchievements();
-            document.getElementById('main-content').scrollTop = 0;
-        });
+// ========== НАВИГАЦИЯ ==========
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const sn = btn.dataset.screen;
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-' + sn).classList.add('active');
+        if (sn === 'history') renderHistory();
+        if (sn === 'achievements') renderAchievements();
+        document.getElementById('main-content').scrollTop = 0;
     });
+});
 
-    // ========== ПАГИНАЦИЯ ==========
-    function changePage(direction) {
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        const maxPage = maxDays === 60 ? 1 : 0;
-        appData.currentPage = (appData.currentPage || 0) + direction;
-        if (appData.currentPage < 0) appData.currentPage = 0;
-        if (appData.currentPage > maxPage) appData.currentPage = maxPage;
-        renderTrackerGrid();
-        updatePageControls();
+function changePage(dir) {
+    const maxPage = userPlan === 'premium' ? 1 : 0;
+    appData.currentPage = (appData.currentPage || 0) + dir;
+    if (appData.currentPage < 0) appData.currentPage = 0;
+    if (appData.currentPage > maxPage) appData.currentPage = maxPage;
+    renderTrackerGrid(); updatePageControls();
+}
+
+function updatePageControls() {
+    const prev = document.getElementById('prev-page');
+    const next = document.getElementById('next-page');
+    const ind = document.getElementById('page-indicator');
+    if (userPlan === 'basic') {
+        prev.style.display = 'none'; next.style.display = 'none'; ind.textContent = 'Дни 1-30';
+        return;
     }
+    prev.style.display = 'flex'; next.style.display = 'flex';
+    if (appData.currentPage === 0) { prev.classList.add('disabled'); next.classList.remove('disabled'); ind.textContent = 'Дни 1-30'; }
+    else { prev.classList.remove('disabled'); next.classList.add('disabled'); ind.textContent = 'Дни 31-60'; }
+}
 
-    function updatePageControls() {
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        const prevBtn = document.getElementById('prev-page');
-        const nextBtn = document.getElementById('next-page');
-        const indicator = document.getElementById('page-indicator');
-        
-        if (appData.currentPage === 0) {
-            prevBtn.classList.add('disabled');
-            nextBtn.classList.remove('disabled');
-            indicator.textContent = maxDays === 60 ? 'Дни 1-30' : 'Дни 1-30';
-        } else {
-            prevBtn.classList.remove('disabled');
-            nextBtn.classList.add('disabled');
-            indicator.textContent = 'Дни 31-60';
-        }
-        
-        // Скрываем стрелки если basic
-        if (userPlan === 'basic') {
-            prevBtn.style.display = 'none';
-            nextBtn.style.display = 'none';
-            indicator.textContent = 'Дни 1-30';
-        }
+function updateStats() {
+    const maxDays = userPlan === 'premium' ? 60 : 30;
+    const completed = appData.currentAttempt?.completedDays?.filter(d => d <= maxDays).length || 0;
+    const percent = Math.round((completed / maxDays) * 100);
+    const bar = document.getElementById('progress-bar');
+    bar.style.width = percent + '%';
+    if (percent <= 20) bar.style.background = 'linear-gradient(90deg, #8B4513, #A0522D)';
+    else if (percent <= 50) bar.style.background = 'linear-gradient(90deg, #71797E, #8B8D91)';
+    else bar.style.background = 'linear-gradient(90deg, #FFD700, #FFA500)';
+    document.getElementById('progress-text').textContent = percent + '% завершено';
+    document.getElementById('total-days').textContent = appData.totalDays;
+    document.getElementById('best-streak').textContent = appData.bestStreak;
+    document.getElementById('total-attempts').textContent = appData.attemptsHistory.length;
+    const allComp = appData.currentAttempt?.completedDays || [];
+    updateSmartWarning(allComp.length > 0 ? Math.max(...allComp) : 0);
+    renderTrackerGrid();
+    if (userPlan === 'premium') checkAchievements();
+    saveData();
+}
+
+function renderTrackerGrid() {
+    const maxDays = userPlan === 'premium' ? 60 : 30;
+    const grid = document.getElementById('days-grid'); grid.innerHTML = '';
+    const completedDays = appData.currentAttempt?.completedDays || [];
+    const forgedDays = appData.forgedDays || [];
+    const fCompleted = completedDays.filter(d => d <= maxDays);
+    const maxComp = fCompleted.length > 0 ? Math.max(...fCompleted) : 0;
+    const currentDay = maxComp + 1;
+    const startDay = userPlan === 'premium' ? (appData.currentPage === 0 ? 1 : 31) : 1;
+    const endDay = userPlan === 'premium' ? (appData.currentPage === 0 ? 30 : 60) : 30;
+
+    for (let i = startDay; i <= endDay; i++) {
+        const cell = document.createElement('div'); cell.className = 'day-cell'; cell.textContent = i;
+        if (completedDays.includes(i)) cell.classList.add('completed');
+        else if (forgedDays.includes(i)) cell.classList.add('forged');
+        else if (i === currentDay && appData.currentAttempt && i <= maxDays) cell.classList.add('current');
+        else if (i < currentDay && appData.currentAttempt && !completedDays.includes(i) && !forgedDays.includes(i)) cell.classList.add('missed');
+        else if (i > currentDay) cell.classList.add('locked');
+        cell.addEventListener('click', () => {
+            if (completedDays.includes(i)) showPopup('✅', `День ${i}`, quotes[i] || 'Отлично!');
+            else if (forgedDays.includes(i)) showPopup('⚔️', `День ${i}`, 'Боевое крещение. Шрам закалки.');
+            else if (i === currentDay && appData.currentAttempt && i <= maxDays) completeDay();
+            else if (i < currentDay && appData.currentAttempt && i <= maxDays) showPastDayPopup(i);
+            else showPopup('🔒', `День ${i}`, 'Ещё не наступил');
+        });
+        grid.appendChild(cell);
     }
+    updatePageControls();
+}
 
-    // ========== ОБНОВЛЕНИЕ ==========
-    function updateStats() {
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        const completed = appData.currentAttempt?.completedDays?.filter(d => d <= maxDays).length || 0;
-        const percent = Math.round((completed / maxDays) * 100);
+function updateSmartWarning(day) {
+    const el = document.getElementById('smart-warning');
+    if (day <= 5) el.textContent = '💡 Первые дни — самые важные';
+    else if (day <= 10) el.textContent = '⚠️ Пик срывов по статистике';
+    else if (day <= 20) el.textContent = '🔥 Точка перелома';
+    else if (day <= 30) el.textContent = '💎 Близок к финишу первой половины';
+    else if (day <= 40) el.textContent = '🔄 Вторая половина — ты уже мастер';
+    else if (day <= 60) el.textContent = '👑 Финишная прямая!';
+    else el.textContent = '👑 Путь завершён!';
+}
 
-        const bar = document.getElementById('progress-bar');
-        bar.style.width = percent + '%';
-        if (percent <= 20) bar.style.background = 'linear-gradient(90deg, #8B4513, #A0522D)';
-        else if (percent <= 50) bar.style.background = 'linear-gradient(90deg, #71797E, #8B8D91)';
-        else bar.style.background = 'linear-gradient(90deg, #FFD700, #FFA500)';
-        
-        document.getElementById('progress-text').textContent = percent + '% завершено';
-        document.getElementById('total-days').textContent = appData.totalDays;
-        document.getElementById('best-streak').textContent = appData.bestStreak;
-        document.getElementById('total-attempts').textContent = appData.attemptsHistory.length;
+function showVictoryScreen(day, quote) {
+    const overlay = document.createElement('div'); overlay.className = 'victory-overlay';
+    overlay.innerHTML = `<div class="victory-day">ДЕНЬ ${day}</div><div class="victory-quote">${quote}</div><button class="victory-btn">ПРОДОЛЖИТЬ</button>`;
+    document.body.appendChild(overlay);
+    overlay.querySelector('.victory-btn').onclick = () => { overlay.style.opacity = '0'; overlay.style.transition = 'opacity 0.3s'; setTimeout(() => overlay.remove(), 300); };
+}
 
-        const allCompleted = appData.currentAttempt?.completedDays || [];
-        const maxCompletedDay = allCompleted.length > 0 ? Math.max(...allCompleted) : 0;
-        updateSmartWarning(maxCompletedDay);
-        renderTrackerGrid();
-        if (userPlan === 'premium') checkAchievements();
-        saveData();
-    }
-
-    function renderTrackerGrid() {
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        const grid = document.getElementById('days-grid');
-        grid.innerHTML = '';
-        const completedDays = appData.currentAttempt?.completedDays || [];
-        const forgedDays = appData.forgedDays || [];
-        const filteredCompleted = completedDays.filter(d => d <= maxDays);
-        const maxCompleted = filteredCompleted.length > 0 ? Math.max(...filteredCompleted) : 0;
-        const currentDay = maxCompleted + 1;
-        const startDay = userPlan === 'premium' ? (appData.currentPage === 0 ? 1 : 31) : 1;
-        const endDay = userPlan === 'premium' ? (appData.currentPage === 0 ? 30 : 60) : 30;
-
-        for (let i = startDay; i <= endDay; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'day-cell';
-            cell.textContent = i;
-
-            if (completedDays.includes(i)) {
-                cell.classList.add('completed');
-            } else if (forgedDays.includes(i)) {
-                cell.classList.add('forged');
-            } else if (i === currentDay && appData.currentAttempt && i <= maxDays) {
-                cell.classList.add('current');
-            } else if (i < currentDay && appData.currentAttempt && !completedDays.includes(i) && !forgedDays.includes(i)) {
-                cell.classList.add('missed');
-            } else if (i > currentDay) {
-                cell.classList.add('locked');
-            }
-
-            cell.addEventListener('click', () => {
-                if (completedDays.includes(i)) {
-                    showPopup('✅', `День ${i}`, quotes[i] || 'Отличная работа!');
-                } else if (forgedDays.includes(i)) {
-                    showPopup('⚔️', `День ${i}`, 'Боевое крещение. Ты упал — ты встал. Шрам закалки.');
-                } else if (i === currentDay && appData.currentAttempt && i <= maxDays) {
-                    completeDay();
-                } else if (i < currentDay && appData.currentAttempt && i <= maxDays) {
-                    showPastDayPopup(i);
-                } else {
-                    showPopup('🔒', `День ${i}`, 'Этот день ещё не наступил');
-                }
-            });
-
-            grid.appendChild(cell);
-        }
-        updatePageControls();
-    }
-
-    function updateSmartWarning(day) {
-        const warningEl = document.getElementById('smart-warning');
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        if (day <= 5) warningEl.textContent = '💡 Первые дни — самые важные';
-        else if (day <= 10) warningEl.textContent = '⚠️ Пик срывов по статистике';
-        else if (day <= 20) warningEl.textContent = '🔥 Точка перелома';
-        else if (day <= 30) warningEl.textContent = '💎 Близок к финишу первой половины';
-        else if (maxDays > 30 && day <= 40) warningEl.textContent = '🔄 Вторая половина — ты уже мастер';
-        else if (maxDays > 30 && day <= 60) warningEl.textContent = '👑 Финишная прямая!';
-        else warningEl.textContent = '👑 Путь завершён!';
-    }
-
-    // ========== ЗЕЛЁНЫЙ ЭКРАН ==========
-    function showVictoryScreen(day, quote) {
-        const overlay = document.createElement('div');
-        overlay.className = 'victory-overlay';
-        overlay.innerHTML = `<div class="victory-day">ДЕНЬ ${day}</div><div class="victory-quote">${quote}</div><button class="victory-btn">ПРОДОЛЖИТЬ</button>`;
-        document.body.appendChild(overlay);
-        overlay.querySelector('.victory-btn').onclick = () => {
-            overlay.style.opacity = '0';
-            overlay.style.transition = 'opacity 0.3s ease';
-            setTimeout(() => overlay.remove(), 300);
-        };
-    }
-
-    function completeDay() {
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        if (!appData.currentAttempt) {
-            appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
-        }
-        const nextDay = (appData.currentAttempt.completedDays.length > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0) + 1;
-        if (nextDay > maxDays) {
-            showPopup('👑', 'Поздравляем!', `Вы завершили ${maxDays} дней!`);
-            return;
-        }
-        if (!appData.currentAttempt.completedDays.includes(nextDay)) {
-            appData.currentAttempt.completedDays.push(nextDay);
-            appData.currentAttempt.completedDays.sort((a,b) => a-b);
-            appData.totalDays++;
-            appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
-            appData.forgedDays = (appData.forgedDays || []).filter(d => d !== nextDay);
-            if (nextDay > 30 && appData.currentPage === 0) appData.currentPage = 1;
-            updateStats();
-            showVictoryScreen(nextDay, quotes[nextDay] || 'Продолжай в том же духе!');
-        }
-    }
-
-    function showPastDayPopup(day) {
-        const popup = document.createElement('div');
-        popup.className = 'modal-overlay';
-        popup.innerHTML = `<div class="modal" style="text-align:center;"><div style="font-size:40px;">📅</div><h3 style="color:var(--gold);margin:8px 0;">День ${day} пропущен</h3><p style="font-size:13px;margin:10px 0;">Хотите отметить этот день как выполненный?</p><div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-outline btn-sm" style="flex:1;" onclick="this.closest('.modal-overlay').remove()">ОТМЕНА</button><button class="btn btn-gold btn-sm" style="flex:1;" onclick="completePastDay(${day});this.closest('.modal-overlay').remove();">✅ ОТМЕТИТЬ</button></div></div>`;
-        document.body.appendChild(popup);
-        popup.addEventListener('click',(e)=>{if(e.target===popup)popup.remove();});
-    }
-
-    function completePastDay(day) {
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        if (!appData.currentAttempt) appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
-        if (appData.currentAttempt.completedDays.includes(day)) return;
-        appData.currentAttempt.completedDays.push(day);
+function completeDay() {
+    const maxDays = userPlan === 'premium' ? 60 : 30;
+    if (!appData.currentAttempt) appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
+    const nextDay = (appData.currentAttempt.completedDays.length > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0) + 1;
+    if (nextDay > maxDays) { showPopup('👑', 'Поздравляем!', `Завершено ${maxDays} дней!`); return; }
+    if (!appData.currentAttempt.completedDays.includes(nextDay)) {
+        appData.currentAttempt.completedDays.push(nextDay);
         appData.currentAttempt.completedDays.sort((a,b)=>a-b);
         appData.totalDays++;
         appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.filter(d=>d<=maxDays).length);
-        appData.forgedDays = (appData.forgedDays||[]).filter(d=>d!==day);
+        appData.forgedDays = (appData.forgedDays||[]).filter(d=>d!==nextDay);
+        if (nextDay > 30 && userPlan === 'premium') appData.currentPage = 1;
         updateStats();
-        showVictoryScreen(day, quotes[day]||'Продолжай!');
+        showVictoryScreen(nextDay, quotes[nextDay] || 'Продолжай!');
     }
+}
 
-    function failDay() {
-        const maxDays = userPlan === 'premium' ? 60 : 30;
-        if (!appData.currentAttempt) { showPopup('⚠️','Нет активной попытки','Начните новую попытку!'); return; }
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `<div class="modal"><h3 style="color:var(--gold);">❌ Причина срыва</h3><textarea id="fail-reason" placeholder="Опишите причину..."></textarea><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-outline btn-sm" style="flex:1;" onclick="this.closest('.modal-overlay').remove()">ОТМЕНА</button><button class="btn btn-danger btn-sm" style="flex:1;" id="save-fail">СОХРАНИТЬ</button></div></div>`;
-        document.body.appendChild(modal);
-        modal.querySelector('#save-fail').addEventListener('click',()=>{
-            const reason = modal.querySelector('#fail-reason').value || 'Не указана';
-            const completed = appData.currentAttempt.completedDays.length;
-            const maxDay = completed > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0;
-            const failDayNum = maxDay + 1;
-            if (!appData.forgedDays) appData.forgedDays = [];
-            if (failDayNum <= maxDays && !appData.forgedDays.includes(failDayNum)) appData.forgedDays.push(failDayNum);
-            appData.attemptsHistory.push({ startDate: appData.currentAttempt.startDate, endDate: new Date().toISOString(), daysCompleted: completed, reason: reason });
-            
-            if (userPlan === 'premium') {
-                // Premium: сохраняем прогресс
-                const savedDays = [...appData.currentAttempt.completedDays];
-                appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: savedDays };
-            } else {
-                // Basic: сбрасываем
-                appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
-            }
-            
-            appData.currentPage = failDayNum > 30 ? 1 : 0;
-            updateStats();
-            modal.remove();
-            showPopup('⚔️',`День ${failDayNum}`,'Боевое крещение. Ты упал — ты встал. Шрам закалки.\n\n' + (userPlan === 'premium' ? 'Прогресс сохранён. Продолжай!' : 'Новая попытка начата.'));
-        });
-        modal.addEventListener('click',(e)=>{if(e.target===modal)modal.remove();});
-    }
+function showPastDayPopup(day) {
+    const popup = document.createElement('div'); popup.className = 'modal-overlay';
+    popup.innerHTML = `<div class="modal" style="text-align:center;"><div style="font-size:40px;">📅</div><h3 style="color:var(--gold);">День ${day} пропущен</h3><p style="font-size:13px;margin:10px 0;">Отметить как выполненный?</p><div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-outline btn-sm" style="flex:1;" onclick="this.closest('.modal-overlay').remove()">ОТМЕНА</button><button class="btn btn-gold btn-sm" style="flex:1;" onclick="completePastDay(${day});this.closest('.modal-overlay').remove();">✅ ОТМЕТИТЬ</button></div></div>`;
+    document.body.appendChild(popup);
+    popup.addEventListener('click',(e)=>{if(e.target===popup)popup.remove();});
+}
 
-    function resetAttempt() {
-        if (appData.currentAttempt && appData.currentAttempt.completedDays.length > 0) {
-            if(!confirm('Начать новую попытку? Текущий прогресс будет сохранён в историю.')) return;
-            appData.attemptsHistory.push({ startDate: appData.currentAttempt.startDate, endDate: new Date().toISOString(), daysCompleted: appData.currentAttempt.completedDays.length, reason: 'Сброс пользователем' });
+function completePastDay(day) {
+    if (!appData.currentAttempt) appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
+    if (appData.currentAttempt.completedDays.includes(day)) return;
+    appData.currentAttempt.completedDays.push(day);
+    appData.currentAttempt.completedDays.sort((a,b)=>a-b);
+    appData.totalDays++;
+    appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
+    appData.forgedDays = (appData.forgedDays||[]).filter(d=>d!==day);
+    updateStats();
+    showVictoryScreen(day, quotes[day]||'Продолжай!');
+}
+
+function failDay() {
+    const maxDays = userPlan === 'premium' ? 60 : 30;
+    if (!appData.currentAttempt) { showPopup('⚠️','Нет попытки','Начни новую!'); return; }
+    const modal = document.createElement('div'); modal.className = 'modal-overlay';
+    modal.innerHTML = `<div class="modal"><h3 style="color:var(--gold);">❌ Причина срыва</h3><textarea id="fail-reason" placeholder="Опиши причину..."></textarea><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-outline btn-sm" style="flex:1;" onclick="this.closest('.modal-overlay').remove()">ОТМЕНА</button><button class="btn btn-danger btn-sm" style="flex:1;" id="save-fail">СОХРАНИТЬ</button></div></div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('#save-fail').addEventListener('click',()=>{
+        const reason = modal.querySelector('#fail-reason').value || 'Не указана';
+        const completed = appData.currentAttempt.completedDays.length;
+        const maxDay = completed > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0;
+        const failDayNum = maxDay + 1;
+        if (!appData.forgedDays) appData.forgedDays = [];
+        if (failDayNum <= maxDays && !appData.forgedDays.includes(failDayNum)) appData.forgedDays.push(failDayNum);
+        appData.attemptsHistory.push({ startDate: appData.currentAttempt.startDate, endDate: new Date().toISOString(), daysCompleted: completed, reason });
+        if (userPlan === 'premium') {
+            const savedDays = [...appData.currentAttempt.completedDays];
+            appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: savedDays };
+        } else {
+            appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
         }
-        appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
-        appData.currentPage = 0;
-        updateStats();
-        showPopup('🔄','Новая попытка начата!','Удачи!');
-    }
+        appData.currentPage = failDayNum > 30 ? 1 : 0;
+        updateStats(); modal.remove();
+        showPopup('⚔️',`День ${failDayNum}`,'Боевое крещение.' + (userPlan==='premium'?' Прогресс сохранён!':' Новая попытка.'));
+    });
+    modal.addEventListener('click',(e)=>{if(e.target===modal)modal.remove();});
+}
 
-    let helpTimerInterval = null;
-    function helpMe() {
-        if (helpTimerInterval) { clearInterval(helpTimerInterval); helpTimerInterval = null; }
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.id = 'help-modal';
-        let timeLeft = 15 * 60;
-        modal.innerHTML = `<div class="modal"><h3 style="color:var(--gold);text-align:center;">🆘 ЭКСТРЕННАЯ ПОМОЩЬ</h3><div class="timer-display" id="help-timer">15:00</div><div class="help-step">1. ВСТАНЬ И ВЫЙДИ</div><div class="help-step">2. ХОЛОДНАЯ ВОДА</div><div class="help-step">3. 20 ПРИСЕДАНИЙ</div><div class="help-step">4. ДЫШИ: 4-7-8</div><p style="margin-top:8px;color:var(--gold);font-size:12px;text-align:center;">Позыв уйдёт через 15 минут. Держись!</p><button class="btn btn-danger btn-block btn-sm" id="close-help" style="margin-top:10px;">ЗАКРЫТЬ</button></div>`;
-        document.body.appendChild(modal);
-        function updateTimer() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            const timerDisplay = document.getElementById('help-timer');
-            if (timerDisplay) {
-                timerDisplay.textContent = `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
-                if (timeLeft <= 60) { timerDisplay.style.color = '#ff4444'; timerDisplay.style.animation = 'pulse 1s infinite'; }
-                else if (timeLeft <= 300) { timerDisplay.style.color = '#ffaa00'; }
-            }
-            if (timeLeft <= 0) { clearInterval(helpTimerInterval); helpTimerInterval = null; if(timerDisplay){timerDisplay.textContent='ГОТОВО!';timerDisplay.style.color='#00ff88';} }
-            timeLeft--;
+function resetAttempt() {
+    if (appData.currentAttempt && appData.currentAttempt.completedDays.length > 0) {
+        if(!confirm('Начать заново? Прогресс сохранится в историю.')) return;
+        appData.attemptsHistory.push({ startDate: appData.currentAttempt.startDate, endDate: new Date().toISOString(), daysCompleted: appData.currentAttempt.completedDays.length, reason: 'Сброс' });
+    }
+    appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
+    appData.currentPage = 0; updateStats();
+    showPopup('🔄','Новая попытка!','Удачи!');
+}
+
+let helpTimer = null;
+function helpMe() {
+    if (helpTimer) { clearInterval(helpTimer); helpTimer = null; }
+    const modal = document.createElement('div'); modal.className = 'modal-overlay'; modal.id = 'help-modal';
+    let timeLeft = 15 * 60;
+    modal.innerHTML = `<div class="modal"><h3 style="color:var(--gold);text-align:center;">🆘 ПОМОЩЬ</h3><div class="timer-display" id="help-timer">15:00</div><div class="help-step">1. ВСТАНЬ И ВЫЙДИ</div><div class="help-step">2. ХОЛОДНАЯ ВОДА</div><div class="help-step">3. 20 ПРИСЕДАНИЙ</div><div class="help-step">4. ДЫШИ: 4-7-8</div><p style="margin-top:8px;color:var(--gold);font-size:12px;text-align:center;">Позыв уйдёт через 15 минут.</p><button class="btn btn-danger btn-block btn-sm" id="close-help" style="margin-top:10px;">ЗАКРЫТЬ</button></div>`;
+    document.body.appendChild(modal);
+    function tick() {
+        const m = Math.floor(timeLeft/60), s = timeLeft%60;
+        const td = document.getElementById('help-timer');
+        if (td) { td.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; if(timeLeft<=60)td.style.color='#ff4444'; else if(timeLeft<=300)td.style.color='#ffaa00'; }
+        if (timeLeft <= 0) { clearInterval(helpTimer); helpTimer=null; if(td){td.textContent='ГОТОВО!';td.style.color='#00ff88';} }
+        timeLeft--;
+    }
+    tick(); helpTimer = setInterval(tick, 1000);
+    modal.querySelector('#close-help').addEventListener('click',()=>{ clearInterval(helpTimer); helpTimer=null; modal.remove(); });
+    modal.addEventListener('click',(e)=>{if(e.target===modal){clearInterval(helpTimer);helpTimer=null;modal.remove();}});
+}
+
+function showPopup(emoji, title, message) {
+    const popup = document.createElement('div'); popup.className = 'modal-overlay';
+    popup.innerHTML = `<div class="modal" style="text-align:center;"><div style="font-size:40px;">${emoji}</div><h3 style="color:var(--gold);">${title}</h3><p style="font-size:13px;">${message}</p><button class="btn btn-gold btn-sm" style="margin-top:12px;" onclick="this.closest('.modal-overlay').remove()">OK</button></div>`;
+    document.body.appendChild(popup);
+    popup.querySelector('button').addEventListener('click',()=>popup.remove());
+    popup.addEventListener('click',(e)=>{if(e.target===popup)popup.remove();});
+}
+
+// ========== ДОСТИЖЕНИЯ ==========
+function checkAchievements() {
+    if (userPlan !== 'premium') return;
+    const comp = appData.currentAttempt?.completedDays?.length || 0;
+    [10,20,30,40,50,60].forEach(m => {
+        if (comp >= m && !appData.achievements[m]) {
+            appData.achievements[m] = new Date().toISOString();
+            const icons = {10:'🥉',20:'🥈',30:'🥇',40:'💎',50:'🔥',60:'👑'};
+            showPopup(icons[m], 'Достижение!', `${m} дней!`);
         }
-        updateTimer();
-        helpTimerInterval = setInterval(updateTimer, 1000);
-        modal.querySelector('#close-help').addEventListener('click',()=>{ clearInterval(helpTimerInterval); helpTimerInterval=null; modal.remove(); });
-        modal.addEventListener('click',(e)=>{if(e.target===modal){clearInterval(helpTimerInterval);helpTimerInterval=null;modal.remove();}});
-    }
+    });
+    saveData();
+}
 
-    function showPopup(emoji, title, message) {
-        const popup = document.createElement('div');
-        popup.className = 'modal-overlay';
-        popup.innerHTML = `<div class="modal" style="text-align:center;"><div style="font-size:40px;">${emoji}</div><h3 style="color:var(--gold);margin:8px 0;">${title}</h3><p style="font-size:13px;line-height:1.4;">${message}</p><button class="btn btn-gold btn-sm" style="margin-top:12px;" onclick="this.closest('.modal-overlay').remove()">OK</button></div>`;
-        document.body.appendChild(popup);
-        popup.querySelector('button').addEventListener('click',()=>popup.remove());
-        popup.addEventListener('click',(e)=>{if(e.target===popup)popup.remove();});
-    }
+function renderAchievements() {
+    const c = document.getElementById('achievements-list'); if (!c) return;
+    const icons = {10:'🥉',20:'🥈',30:'🥇',40:'💎',50:'🔥',60:'👑'};
+    const names = {10:'10 дней',20:'20 дней',30:'30 дней',40:'40 дней',50:'50 дней',60:'60 дней'};
+    c.innerHTML = '';
+    [10,20,30,40,50,60].forEach(m => {
+        const card = document.createElement('div');
+        card.style.cssText = `display:flex;align-items:center;gap:10px;padding:10px;margin:6px 0;border-radius:12px;background:var(--surface);border:1px solid ${appData.achievements[m]?'var(--gold)':'#333'};opacity:${appData.achievements[m]?'1':'0.5'};`;
+        card.innerHTML = appData.achievements[m] ? `<div style="font-size:28px;">${icons[m]}</div><div><strong>${names[m]}</strong><div style="font-size:11px;color:var(--text-secondary);">${new Date(appData.achievements[m]).toLocaleDateString('ru-RU')}</div></div>` : `<div style="font-size:28px;">🔒</div><div><strong>${names[m]}</strong><div style="font-size:11px;color:var(--text-secondary);">Не выполнено</div></div>`;
+        c.appendChild(card);
+    });
+    document.getElementById('certificate-btn').style.display = appData.achievements[60] ? 'block' : 'none';
+}
 
-    // ========== ДОСТИЖЕНИЯ (Premium) ==========
-    function checkAchievements() {
-        if (userPlan !== 'premium') return;
-        [10,20,30,40,50,60].forEach(m => {
-            const completed = appData.currentAttempt?.completedDays?.length || 0;
-            if (completed >= m && !appData.achievements[m]) {
-                appData.achievements[m] = new Date().toISOString();
-                const icons = {10:'🥉',20:'🥈',30:'🥇',40:'💎',50:'🔥',60:'👑'};
-                showPopup(icons[m], 'Достижение разблокировано!', `${m} дней пройдено!`);
-            }
-        });
-        saveData();
-    }
+function getCertificate() {
+    const m = document.createElement('div'); m.className = 'modal-overlay';
+    m.innerHTML = `<div class="modal" style="text-align:center;"><div style="font-size:50px;">👑</div><h2 style="color:var(--gold);">СЕРТИФИКАТ</h2><p>60 дней позади!</p><p style="color:var(--text-secondary);font-size:12px;">${new Date(appData.achievements[60]).toLocaleDateString('ru-RU')}</p><button class="btn btn-gold btn-sm" style="margin-top:10px;" onclick="this.closest('.modal-overlay').remove()">ЗАКРЫТЬ</button></div>`;
+    document.body.appendChild(m);
+    m.addEventListener('click',(e)=>{if(e.target===m)m.remove();});
+}
 
-    function renderAchievements() {
-        const container = document.getElementById('achievements-list');
-        if (!container) return;
-        const icons = {10:'🥉',20:'🥈',30:'🥇',40:'💎',50:'🔥',60:'👑'};
-        const names = {10:'10 дней',20:'20 дней',30:'30 дней',40:'40 дней',50:'50 дней',60:'60 дней'};
-        container.innerHTML = '';
-        [10,20,30,40,50,60].forEach(m => {
-            const card = document.createElement('div');
-            card.style.cssText = `display:flex;align-items:center;gap:10px;padding:10px;margin:6px 0;border-radius:12px;background:var(--surface);border:1px solid ${appData.achievements[m]?'var(--gold)':'#333'};opacity:${appData.achievements[m]?'1':'0.5'};`;
-            if (appData.achievements[m]) {
-                card.innerHTML = `<div style="font-size:28px;">${icons[m]}</div><div><strong>${names[m]}</strong><div style="font-size:11px;color:var(--text-secondary);">${new Date(appData.achievements[m]).toLocaleDateString('ru-RU')}</div></div>`;
-            } else {
-                card.innerHTML = `<div style="font-size:28px;">🔒</div><div><strong>${names[m]}</strong><div style="font-size:11px;color:var(--text-secondary);">Не выполнено</div></div>`;
-            }
-            container.appendChild(card);
-        });
-        document.getElementById('certificate-btn').style.display = appData.achievements[60] ? 'block' : 'none';
-    }
+function renderHistory() {
+    const c = document.getElementById('history-list');
+    if (!appData.attemptsHistory || appData.attemptsHistory.length === 0) { c.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет попыток</p>'; return; }
+    c.innerHTML = '';
+    appData.attemptsHistory.slice().reverse().forEach(a => {
+        const item = document.createElement('div');
+        item.style.cssText = 'background:var(--surface);border:1px solid #333;border-radius:12px;padding:12px;margin:6px 0;';
+        item.innerHTML = `<div style="display:flex;justify-content:space-between;"><span>📅 ${new Date(a.startDate).toLocaleDateString('ru-RU')} → ${new Date(a.endDate).toLocaleDateString('ru-RU')}</span><span style="color:var(--gold);font-weight:bold;">${a.daysCompleted} дн.</span></div><div style="color:var(--text-secondary);font-size:11px;">${a.reason||''}</div>`;
+        c.appendChild(item);
+    });
+}
 
-    function getCertificate() {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `<div class="modal" style="text-align:center;"><div style="font-size:50px;">👑</div><h2 style="color:var(--gold);">СЕРТИФИКАТ</h2><p style="margin:10px 0;">Поздравляем! Вы завершили 60 дней!</p><p style="color:var(--text-secondary);font-size:12px;">${new Date(appData.achievements[60]).toLocaleDateString('ru-RU')}</p><button class="btn btn-gold btn-sm" style="margin-top:10px;" onclick="this.closest('.modal-overlay').remove()">ЗАКРЫТЬ</button></div>`;
-        document.body.appendChild(modal);
-        modal.addEventListener('click',(e)=>{if(e.target===modal)modal.remove();});
-    }
+function toggleTheme() {
+    const t = document.getElementById('theme-toggle');
+    if (t.checked) { document.body.classList.add('light-theme'); appData.theme = 'light'; }
+    else { document.body.classList.remove('light-theme'); appData.theme = 'dark'; }
+    saveData();
+}
+function toggleLanguage() {
+    appData.language = appData.language === 'ru' ? 'en' : 'ru';
+    document.getElementById('lang-label').textContent = appData.language === 'ru' ? 'Русский' : 'English';
+    saveData();
+}
+function saveNotificationSettings() {
+    appData.notifications = { hour: parseInt(document.getElementById('notify-hour').value)||9, minute: parseInt(document.getElementById('notify-minute').value)||0, timezone: document.getElementById('timezone').value };
+    saveData();
+    showPopup('🔔','Сохранено!','Настройки обновлены');
+}
 
-    function renderHistory() {
-        const container = document.getElementById('history-list');
-        if (!appData.attemptsHistory || appData.attemptsHistory.length === 0) {
-            container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет попыток</p>';
-            return;
-        }
-        container.innerHTML = '';
-        appData.attemptsHistory.slice().reverse().forEach(attempt => {
-            const item = document.createElement('div');
-            item.style.cssText = 'background:var(--surface);border:1px solid #333;border-radius:12px;padding:12px;margin:6px 0;';
-            item.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;">📅 ${new Date(attempt.startDate).toLocaleDateString('ru-RU')} → ${new Date(attempt.endDate).toLocaleDateString('ru-RU')}</span><span style="color:var(--gold);font-weight:bold;">${attempt.daysCompleted} дн.</span></div><div style="color:var(--text-secondary);font-size:11px;">Причина: ${attempt.reason||'Не указана'}</div>`;
-            container.appendChild(item);
-        });
+function initApp() {
+    if (appData.theme === 'light') { document.body.classList.add('light-theme'); document.getElementById('theme-toggle').checked = true; }
+    if (appData.language === 'en') document.getElementById('lang-label').textContent = 'English';
+    if (appData.notifications) {
+        document.getElementById('notify-hour').value = appData.notifications.hour || 9;
+        document.getElementById('notify-minute').value = appData.notifications.minute || 0;
+        document.getElementById('timezone').value = appData.notifications.timezone || 'Europe/Moscow';
     }
+    updateStats();
+    if (userPlan === 'premium') renderAchievements();
+}
 
-    function toggleTheme() {
-        const toggle = document.getElementById('theme-toggle');
-        if (toggle.checked) { document.body.classList.add('light-theme'); appData.theme = 'light'; }
-        else { document.body.classList.remove('light-theme'); appData.theme = 'dark'; }
-        saveData();
-    }
-
-    function toggleLanguage() {
-        appData.language = appData.language === 'ru' ? 'en' : 'ru';
-        document.getElementById('lang-label').textContent = appData.language === 'ru' ? 'Русский' : 'English';
-        saveData();
-    }
-
-    function saveNotificationSettings() {
-        appData.notifications = {
-            hour: parseInt(document.getElementById('notify-hour').value) || 9,
-            minute: parseInt(document.getElementById('notify-minute').value) || 0,
-            timezone: document.getElementById('timezone').value
-        };
-        saveData();
-        showPopup('🔔','Сохранено!','Настройки уведомлений обновлены');
-    }
-
-    function initApp() {
-        if (appData.theme === 'light') {
-            document.body.classList.add('light-theme');
-            document.getElementById('theme-toggle').checked = true;
-        }
-        if (appData.language === 'en') document.getElementById('lang-label').textContent = 'English';
-        if (appData.notifications) {
-            document.getElementById('notify-hour').value = appData.notifications.hour || 9;
-            document.getElementById('notify-minute').value = appData.notifications.minute || 0;
-            document.getElementById('timezone').value = appData.notifications.timezone || 'Europe/Moscow';
-        }
-        updateStats();
-        if (userPlan === 'premium') renderAchievements();
-        updatePageControls();
-    }
-
-    // ========== ЗАПУСК ==========
-    checkAccess();
+checkAccess();
 </script>
 </body>
 </html>
