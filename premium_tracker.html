@@ -15,7 +15,6 @@
             --border-gold: 1px solid var(--gold);
             --stat-bg: #1a1a1a; --cell-bg: #1a1a1a; --cell-text: #888; --nav-bg: #0a0a0a;
             --card-bg: #111111; --border-color: rgba(255,215,0,0.1);
-            --success-dark: #2e7d32; --success-light: #4caf50;
         }
         .light-theme { --bg: #f5f0e8; --surface: #ffffff; --gold: #B8860B; --gold-dark: #8B6914; --text: #1a1a1a; --text-secondary: #666; --shadow-gold: 0 0 20px rgba(184,134,11,0.2); --stat-bg: #f0ece4; --cell-bg: #f0ece4; --nav-bg: #ffffff; --card-bg: #ffffff; }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -33,9 +32,7 @@
         @keyframes cellPulse { 0%,100%{transform:scale(1);box-shadow:0 0 5px rgba(255,215,0,0.2);} 50%{transform:scale(1.06);box-shadow:0 0 15px rgba(255,215,0,0.5);} }
         @keyframes victoryFlash { 0%{opacity:0;transform:scale(0.95);} 30%{opacity:1;transform:scale(1);} 100%{opacity:1;transform:scale(1);} }
         @keyframes gradientShift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
-        @keyframes glowGreen { 0%,100%{box-shadow:0 0 5px #4caf50;} 50%{box-shadow:0 0 20px #4caf50,0 0 30px rgba(76,175,80,0.5);} }
-        @keyframes glowRed { 0%,100%{box-shadow:0 0 5px #f44336;} 50%{box-shadow:0 0 20px #f44336,0 0 30px rgba(244,67,54,0.5);} }
-        @keyframes glowOrange { 0%,100%{box-shadow:0 0 5px #FF5722;} 50%{box-shadow:0 0 20px #FF5722,0 0 30px rgba(255,87,34,0.5);} }
+        @keyframes premiumGlow { 0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.2);} 50%{box-shadow:0 0 30px rgba(255,215,0,0.4);} }
         .app-container { position:relative; z-index:1; max-width:480px; margin:0 auto; height:100vh; display:flex; flex-direction:column; padding:8px 12px; }
         .header { text-align:center; padding:8px 0; flex-shrink:0; }
         .premium-badge { display:inline-block; background:var(--gradient-gold); color:#000; padding:4px 14px; border-radius:20px; font-weight:700; font-size:11px; letter-spacing:1px; animation:shimmer 2s infinite; box-shadow:var(--shadow-gold); }
@@ -114,6 +111,13 @@
         .paywall-title { color:var(--gold); font-size:1.2rem; font-weight:bold; margin-bottom:10px; }
         .paywall-text { color:var(--text-secondary); font-size:0.85rem; margin-bottom:30px; line-height:1.5; }
         .paywall-btn { background:var(--gradient-gold); color:#000; border:none; padding:14px 30px; border-radius:25px; font-weight:bold; font-size:1rem; cursor:pointer; }
+        .premium-card { background:var(--stat-bg); border-radius:16px; padding:16px; margin:8px 0; border:1px solid rgba(255,215,0,0.3); box-shadow:0 0 20px rgba(255,215,0,0.1); animation:premiumGlow 3s ease-in-out infinite; }
+        .premium-feature { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,215,0,0.1); transition:all 0.3s; cursor:default; }
+        .premium-feature:last-child { border-bottom:none; }
+        .premium-feature:hover { transform:translateX(5px); border-bottom-color:rgba(255,215,0,0.3); background:rgba(255,215,0,0.03); border-radius:8px; padding-left:8px; }
+        .premium-btn { background:linear-gradient(135deg,#FFD700,#FFA500,#FFD700); background-size:200% 200%; animation:gradientShift 3s ease infinite; color:#000; border:none; padding:12px; border-radius:25px; font-weight:bold; cursor:pointer; width:100%; font-size:0.8rem; margin-top:12px; box-shadow:0 4px 15px rgba(255,215,0,0.3); transition:all 0.3s ease; transform:scale(1); }
+        .premium-btn:hover { box-shadow:0 8px 30px rgba(255,215,0,0.5); transform:scale(1.03); }
+        .premium-btn:active { transform:scale(0.96); box-shadow:0 2px 10px rgba(255,215,0,0.3); }
         @media(min-width:600px){body{padding:20px;}.app-container{max-width:520px;}.day-cell{font-size:0.7rem;}.btn{padding:10px 18px;font-size:13px;}.stat-value{font-size:20px;}.grid{gap:4px;}}
     </style>
 </head>
@@ -125,12 +129,13 @@
     <div class="paywall-text">Для использования трекера оплати доступ.<br>Выбери тариф и начни путь.</div>
     <button class="paywall-btn" onclick="window.open('https://t.me/Choice_on_Bot','_blank')">💎 Купить доступ</button>
 </div>
-<div class="app-container" id="appContainer">
+<div class="app-container" id="appContainer" style="display:none;">
     <div class="header">
         <div class="premium-badge" id="planBadge">🎫 BASIC</div>
         <div class="logo" id="planLogo">30 Дней</div>
     </div>
     <div class="main-content" id="main-content">
+        <!-- ТРЕКЕР -->
         <div class="screen active" id="screen-tracker">
             <div class="card"><div class="progress-container"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div><div style="text-align:center;font-weight:700;color:var(--gold);font-size:13px;" id="progress-text">0% завершено</div></div>
             <div class="stats-row"><div class="stat-item"><div class="stat-value" id="total-days">0</div><div class="stat-label">Всего дней</div></div><div class="stat-item"><div class="stat-value" id="best-streak">0</div><div class="stat-label">Лучшая серия</div></div><div class="stat-item"><div class="stat-value" id="total-attempts">0</div><div class="stat-label">Попыток</div></div></div>
@@ -140,6 +145,19 @@
             <div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="btn btn-gold btn-block" onclick="completeDay()">✅ Выполнил</button><button class="btn btn-danger" style="flex:1;" onclick="failDay()">❌ Сорвался</button><button class="btn btn-outline" style="flex:1;" onclick="helpMe()">🆘 ПОМОГИТЕ</button></div>
             <button class="btn btn-outline btn-block btn-sm" onclick="resetAttempt()">🔄 Начать новую попытку</button>
         </div>
+        <!-- PREMIUM-ЭКРАН (для basic) -->
+        <div class="screen" id="screen-premium">
+            <div class="premium-card">
+                <div class="premium-feature"><span style="font-size:1.4rem;">📅</span><div><div style="color:var(--gold);font-weight:bold;font-size:0.8rem;">60 дней полной трансформации</div><div style="color:var(--text-muted);font-size:0.65rem;margin-top:2px;">Новый уровень: ты не борешься с собой — ты строишь себя.</div></div></div>
+                <div class="premium-feature"><span style="font-size:1.4rem;">🧠</span><div><div style="color:var(--gold);font-weight:bold;font-size:0.8rem;">Перестройка мозга</div><div style="color:var(--text-muted);font-size:0.65rem;margin-top:2px;">60 дней формируют новые нейронные связи.</div></div></div>
+                <div class="premium-feature"><span style="font-size:1.4rem;">💔</span><div><div style="color:var(--gold);font-weight:bold;font-size:0.8rem;">Шрамы вместо сброса</div><div style="color:var(--text-muted);font-size:0.65rem;margin-top:2px;">В базовом срыв — всё сначала. В Premium — шрам закалки, прогресс не сбрасывается.</div></div></div>
+                <div class="premium-feature"><span style="font-size:1.4rem;">🏆</span><div><div style="color:var(--gold);font-weight:bold;font-size:0.8rem;">Достижения + Сертификат</div><div style="color:var(--text-muted);font-size:0.65rem;margin-top:2px;">Каждые 10 дней. После 60 — официальный сертификат.</div></div></div>
+                <div class="premium-feature"><span style="font-size:1.4rem;">🤖</span><div><div style="color:var(--gold);font-weight:bold;font-size:0.8rem;">ИИ-промпты</div><div style="color:var(--text-muted);font-size:0.65rem;margin-top:2px;">Готовые промпты для ChatGPT/Claude/DeepSeek.</div></div></div>
+                <div class="premium-feature"><span style="font-size:1.4rem;">💬</span><div><div style="color:var(--gold);font-weight:bold;font-size:0.8rem;">Поддержка автора</div><div style="color:var(--text-muted);font-size:0.65rem;margin-top:2px;">Разбор срывов, ответы на вопросы, корректировка стратегии.</div></div></div>
+            </div>
+            <button class="premium-btn" onclick="window.open('https://t.me/Choice_on_Bot','_blank')">👑 Получить Premium</button>
+        </div>
+        <!-- Доп. экраны Premium -->
         <div class="screen" id="screen-history"><h3 style="color:var(--gold);margin:8px 0;">📋 История попыток</h3><div id="history-list" style="max-height:calc(100vh - 150px);overflow-y:auto;"></div></div>
         <div class="screen" id="screen-achievements"><h3 style="color:var(--gold);margin:8px 0;">🏆 Достижения</h3><div id="achievements-list" style="max-height:calc(100vh - 200px);overflow-y:auto;"></div><button class="btn btn-gold btn-block" id="certificate-btn" style="display:none;" onclick="getCertificate()">🎓 Получить сертификат</button></div>
         <div class="screen" id="screen-ai"><h3 style="color:var(--gold);margin:8px 0;">🤖 ИИ-Промпты</h3><a class="link-item" href="https://t.me/c/3503823617/307" target="_blank">📋 Промпт перед стартом</a><a class="link-item" href="https://t.me/c/3503823617/307" target="_blank">📋 Принцип Парето (после 30 дн)</a><h4 style="color:var(--gold);margin-top:12px;font-size:13px;">Бесплатные ИИ:</h4><a class="link-item" href="https://chat.openai.com" target="_blank">🤖 ChatGPT</a><a class="link-item" href="https://claude.ai" target="_blank">🤖 Claude</a><a class="link-item" href="https://chat.deepseek.com" target="_blank">🤖 DeepSeek</a><a class="link-item" href="https://gemini.google.com" target="_blank">🤖 Gemini</a><a class="link-item" href="https://copilot.microsoft.com" target="_blank">🤖 Copilot</a></div>
@@ -152,10 +170,11 @@
 </div>
 <nav class="nav" id="bottomNav">
     <button class="nav-btn active" data-screen="tracker">📅 Трекер</button>
-    <button class="nav-btn" data-screen="history">📋 История</button>
-    <button class="nav-btn" data-screen="achievements">🏆 Достижения</button>
-    <button class="nav-btn" data-screen="ai" id="nav-ai">🤖 ИИ</button>
-    <button class="nav-btn" data-screen="settings">⚙ Настройки</button>
+    <button class="nav-btn" data-screen="premium" id="nav-premium">⚡ Premium</button>
+    <button class="nav-btn" data-screen="history" id="nav-history" style="display:none;">📋 История</button>
+    <button class="nav-btn" data-screen="achievements" id="nav-achievements" style="display:none;">🏆 Достижения</button>
+    <button class="nav-btn" data-screen="ai" id="nav-ai" style="display:none;">🤖 ИИ</button>
+    <button class="nav-btn" data-screen="settings" id="nav-settings" style="display:none;">⚙ Настройки</button>
 </nav>
 
 <script>
@@ -178,27 +197,25 @@ for (let i = 0; i < 30; i++) {
 }
 
 const quotes = {
-1:"Первый день — самый простой.",2:"Твой мозг ещё не понял, что ты серьёзно.",3:"Три дня. Это больше, чем 90% мужчин.",4:"Если тебе легко — ты делаешь что-то не так.",5:"Пять дней. Твоя бывшая версия уже не узнала бы тебя.",6:"Триггеры не исчезли. Ты просто стал сильнее.",7:"Первая неделя — грязь. Ты прошёл её.",8:"Мозг захочет сделку. Не торгуйся.",9:"Сублимация — не терпи.",10:"Десять дней. Дофаминовые рецепторы начали просыпаться.",11:"Не запрещай. Заменяй.",12:"Охлаждение — не шутка.",13:"Сон — твоя перезагрузка.",14:"Две недели. Ты уже не тот.",15:"Пик ломки. Если ты здесь — ты пройдёшь всё.",16:"Не проверяй 'а работает ли ещё'. Работает.",17:"Утренняя эрекция — не враг.",18:"Эротический сон — не срыв.",19:"Энергия прёт. Не сиди.",20:"Женщины чувствуют твою силу.",21:"Три недели. Ты перестроил нейронные сети.",22:"Чувствительность вернулась.",23:"Злость — это топливо.",24:"Тестостерон на пике.",25:"Люди тянутся к тебе.",26:"Осталось 4 дня.",27:"Энергия переполняет.",28:"Стресс — не оправдание.",29:"Один день. Ты прошёл 29.",30:"Ты сделал выбор 30 раз. Ты — мужчина.",
-31:"Ты перевалил за половину.",32:"Твой мозг перестроился на 70%.",33:"Ты не лучше 99% мужчин. Ты лучше себя вчерашнего.",34:"Дофаминовая яма позади.",35:"Пять недель. Твой голос глубже.",36:"Спроси себя: что изменилось?",37:"Ты не борешься с собой. Ты управляешь собой.",38:"Вторая половина пути.",39:"Твоя энергия пугает окружающих.",40:"Сорок дней.",41:"Сравни себя с днём 0.",42:"Ты переписал свои нейронные связи.",43:"Женщины чувствуют твою силу.",44:"До конца две недели.",45:"Твой тестостерон на историческом максимуме.",46:"Ты уже не тот кто начинал.",47:"Срывы других — не твоя история.",48:"Последние дни. Не слушай.",49:"Ты сделал выбор 49 раз.",50:"Пятьдесят. Ты на финишной прямой.",51:"Каждый день с 51 по 60 — твой рекорд.",52:"Ты спокоен. Ты уверен.",53:"Осталась неделя.",54:"Твой сон глубокий.",55:"Пять дней. Не торгуйся.",56:"Ты молча делаешь то что другие обещают.",57:"Три дня. Ты на пике.",58:"Предпоследний рывок.",59:"Завтра — день 60.",60:"Ты сделал это. 60 дней."
+1:"Первый день — самый простой.",2:"Твой мозг ещё не понял, что ты серьёзно.",3:"Три дня. Это больше, чем 90% мужчин.",4:"Если тебе легко — ты делаешь что-то не так.",5:"Пять дней. Твоя бывшая версия уже не узнала бы тебя.",6:"Триггеры не исчезли.",7:"Первая неделя — грязь. Ты прошёл её.",8:"Мозг захочет сделку. Не торгуйся.",9:"Сублимация — не терпи.",10:"Десять дней. Дофаминовые рецепторы проснулись.",11:"Не запрещай. Заменяй.",12:"Охлаждение — не шутка.",13:"Сон — твоя перезагрузка.",14:"Две недели. Ты уже не тот.",15:"Пик ломки. Ты пройдёшь всё.",16:"Не проверяй 'работает ли'. Работает.",17:"Утренняя эрекция — не враг.",18:"Эротический сон — не срыв.",19:"Энергия прёт. Не сиди.",20:"Женщины чувствуют твою силу.",21:"Три недели. Ты перестроил нейронные сети.",22:"Чувствительность вернулась.",23:"Злость — это топливо.",24:"Тестостерон на пике.",25:"Люди тянутся к тебе.",26:"Осталось 4 дня.",27:"Энергия переполняет.",28:"Стресс — не оправдание.",29:"Один день. Ты прошёл 29.",30:"Ты сделал выбор 30 раз. Ты — мужчина.",
+31:"Ты перевалил за половину.",32:"Мозг перестроился на 70%.",33:"Ты лучше себя вчерашнего.",34:"Дофаминовая яма позади.",35:"Пять недель. Голос глубже.",36:"Что изменилось за 36 дней?",37:"Ты управляешь собой.",38:"Вторая половина пути.",39:"Энергия пугает окружающих.",40:"Сорок дней.",41:"Сравни себя с днём 0.",42:"Ты переписал нейронные связи.",43:"Не трать силу на пустые разговоры.",44:"До конца две недели.",45:"Тестостерон на максимуме.",46:"Ты — версия 2.0.",47:"Срывы других — не твоя история.",48:"Не слушай мозг.",49:"Ещё 11 дней.",50:"Пятьдесят. Финишная прямая.",51:"Каждый день — твой рекорд.",52:"Ты спокоен и уверен.",53:"Осталась неделя.",54:"Сон глубокий.",55:"Не торгуйся.",56:"Ты делаешь то что другие обещают.",57:"Ты на пике.",58:"Предпоследний рывок.",59:"Завтра — день 60.",60:"Ты сделал это. 60 дней."
 };
 
 const DEFAULT_DATA = { currentAttempt: null, totalDays: 0, bestStreak: 0, attemptsHistory: [], achievements: {}, theme: 'dark', language: 'ru', notifications: { hour: 9, minute: 0, timezone: 'Europe/Moscow' }, currentPage: 0, forgedDays: [] };
 let appData = loadData();
 
-// ========== МИГРАЦИЯ ==========
 function migrateOldData() {
     if (localStorage.getItem('choice_unified_v1')) return;
-    // Пробуем старые ключи по порядку
     const keys = ['choice_basic_data', 'choice_data_v3', 'premium_tracker_60_v7'];
     for (const key of keys) {
         const raw = localStorage.getItem(key);
         if (raw) {
-                       try {
+            try {
                 const data = JSON.parse(raw);
                 const migrated = { ...DEFAULT_DATA };
                 if (data.currentAttempt) migrated.currentAttempt = data.currentAttempt;
-                if (data.totalDays) migrated.totalDays = data.totalDays;
-                if (data.bestStreak) migrated.bestStreak = data.bestStreak;
+                if (data.totalDays != null) migrated.totalDays = data.totalDays;
+                if (data.bestStreak != null) migrated.bestStreak = data.bestStreak;
                 if (data.attemptsHistory) migrated.attemptsHistory = data.attemptsHistory;
                 if (data.forgedDays) migrated.forgedDays = data.forgedDays;
                 if (data.achievements) migrated.achievements = data.achievements;
@@ -225,35 +242,54 @@ function saveData() { localStorage.setItem('choice_unified_v1', JSON.stringify(a
 
 // ========== ПРОВЕРКА ДОСТУПА ==========
 async function checkAccess() {
-    if (!userId) { document.getElementById('paywallScreen').style.display = 'flex'; return; }
+    if (!userId) { showPaywall(); return; }
     try {
         const resp = await fetch(`${API_URL}/api/check-access/${userId}`);
         const data = await resp.json();
         userPlan = data.plan || 'none';
-        if (userPlan === 'none') {
-            document.getElementById('paywallScreen').style.display = 'flex';
-            document.getElementById('appContainer').style.display = 'none';
-        } else {
-            document.getElementById('paywallScreen').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'flex';
-            if (userPlan === 'basic') {
-                document.getElementById('planBadge').textContent = '🎫 BASIC';
-                document.getElementById('planBadge').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
-                document.getElementById('planLogo').textContent = '30 Дней';
-                document.getElementById('nav-ai').style.display = 'none';
-            } else {
-                document.getElementById('planBadge').textContent = '👑 PREMIUM';
-                document.getElementById('planLogo').textContent = '👑 60 Дней';
-                document.getElementById('nav-ai').style.display = 'flex';
-            }
-            initApp();
-        }
-    } catch(e) {
-        document.getElementById('paywallScreen').style.display = 'none';
-        document.getElementById('appContainer').style.display = 'flex';
-        userPlan = 'basic';
-        initApp();
+        if (userPlan === 'none') { showPaywall(); }
+        else { showApp(); }
+    } catch(e) { userPlan = 'basic'; showApp(); }
+}
+
+function showPaywall() {
+    document.getElementById('paywallScreen').style.display = 'flex';
+    document.getElementById('appContainer').style.display = 'none';
+}
+
+function showApp() {
+    document.getElementById('paywallScreen').style.display = 'none';
+    document.getElementById('appContainer').style.display = 'flex';
+    
+    if (userPlan === 'basic') {
+        document.getElementById('planBadge').textContent = '🎫 BASIC';
+        document.getElementById('planBadge').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+        document.getElementById('planLogo').textContent = '30 Дней';
+        // Только трекер + Premium
+        document.getElementById('nav-premium').style.display = 'flex';
+        document.getElementById('nav-history').style.display = 'none';
+        document.getElementById('nav-achievements').style.display = 'none';
+        document.getElementById('nav-ai').style.display = 'none';
+        document.getElementById('nav-settings').style.display = 'none';
+        // Стрелки пагинации скрыты
+        document.getElementById('prev-page').style.display = 'none';
+        document.getElementById('next-page').style.display = 'none';
+        document.getElementById('page-indicator').textContent = 'Дни 1-30';
+    } else {
+        document.getElementById('planBadge').textContent = '👑 PREMIUM';
+        document.getElementById('planBadge').style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+        document.getElementById('planLogo').textContent = '👑 60 Дней';
+        // Все вкладки
+        document.getElementById('nav-premium').style.display = 'none';
+        document.getElementById('nav-history').style.display = 'flex';
+        document.getElementById('nav-achievements').style.display = 'flex';
+        document.getElementById('nav-ai').style.display = 'flex';
+        document.getElementById('nav-settings').style.display = 'flex';
+        // Стрелки пагинации видны
+        document.getElementById('prev-page').style.display = 'flex';
+        document.getElementById('next-page').style.display = 'flex';
     }
+    initApp();
 }
 
 // ========== НАВИГАЦИЯ ==========
@@ -263,7 +299,8 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.add('active');
         const sn = btn.dataset.screen;
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('screen-' + sn).classList.add('active');
+        const target = document.getElementById('screen-' + sn);
+        if (target) target.classList.add('active');
         if (sn === 'history') renderHistory();
         if (sn === 'achievements') renderAchievements();
         document.getElementById('main-content').scrollTop = 0;
@@ -271,22 +308,18 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 });
 
 function changePage(dir) {
-    const maxPage = userPlan === 'premium' ? 1 : 0;
+    if (userPlan !== 'premium') return;
     appData.currentPage = (appData.currentPage || 0) + dir;
     if (appData.currentPage < 0) appData.currentPage = 0;
-    if (appData.currentPage > maxPage) appData.currentPage = maxPage;
+    if (appData.currentPage > 1) appData.currentPage = 1;
     renderTrackerGrid(); updatePageControls();
 }
 
 function updatePageControls() {
+    if (userPlan !== 'premium') return;
     const prev = document.getElementById('prev-page');
     const next = document.getElementById('next-page');
     const ind = document.getElementById('page-indicator');
-    if (userPlan === 'basic') {
-        prev.style.display = 'none'; next.style.display = 'none'; ind.textContent = 'Дни 1-30';
-        return;
-    }
-    prev.style.display = 'flex'; next.style.display = 'flex';
     if (appData.currentPage === 0) { prev.classList.add('disabled'); next.classList.remove('disabled'); ind.textContent = 'Дни 1-30'; }
     else { prev.classList.remove('disabled'); next.classList.add('disabled'); ind.textContent = 'Дни 31-60'; }
 }
@@ -329,6 +362,7 @@ function renderTrackerGrid() {
         else if (i === currentDay && appData.currentAttempt && i <= maxDays) cell.classList.add('current');
         else if (i < currentDay && appData.currentAttempt && !completedDays.includes(i) && !forgedDays.includes(i)) cell.classList.add('missed');
         else if (i > currentDay) cell.classList.add('locked');
+        
         cell.addEventListener('click', () => {
             if (completedDays.includes(i)) showPopup('✅', `День ${i}`, quotes[i] || 'Отлично!');
             else if (forgedDays.includes(i)) showPopup('⚔️', `День ${i}`, 'Боевое крещение. Шрам закалки.');
@@ -362,11 +396,21 @@ function showVictoryScreen(day, quote) {
 function completeDay() {
     const maxDays = userPlan === 'premium' ? 60 : 30;
     if (!appData.currentAttempt) appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
+    
     const nextDay = (appData.currentAttempt.completedDays.length > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0) + 1;
     if (nextDay > maxDays) { showPopup('👑', 'Поздравляем!', `Завершено ${maxDays} дней!`); return; }
+    
+    // Проверка: 1 день в сутки
+    const today = new Date().toDateString();
+    if (appData.currentAttempt.lastCompletedDate === today && appData.currentAttempt.completedDays.includes(nextDay - 1)) {
+        showPopup('⚠️', 'Подождите!', 'Можно отметить только 1 день в сутки');
+        return;
+    }
+    
     if (!appData.currentAttempt.completedDays.includes(nextDay)) {
         appData.currentAttempt.completedDays.push(nextDay);
         appData.currentAttempt.completedDays.sort((a,b)=>a-b);
+        appData.currentAttempt.lastCompletedDate = today;
         appData.totalDays++;
         appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.filter(d=>d<=maxDays).length);
         appData.forgedDays = (appData.forgedDays||[]).filter(d=>d!==nextDay);
@@ -384,12 +428,17 @@ function showPastDayPopup(day) {
 }
 
 function completePastDay(day) {
+    const maxDays = userPlan === 'premium' ? 60 : 30;
     if (!appData.currentAttempt) appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
     if (appData.currentAttempt.completedDays.includes(day)) return;
+    
+    const maxComp = appData.currentAttempt.completedDays.length > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0;
+    if (day > maxComp + 1) { showPopup('🔒','Недоступно','Сначала отметь предыдущие дни'); return; }
+    
     appData.currentAttempt.completedDays.push(day);
     appData.currentAttempt.completedDays.sort((a,b)=>a-b);
     appData.totalDays++;
-    appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.length);
+    appData.bestStreak = Math.max(appData.bestStreak, appData.currentAttempt.completedDays.filter(d=>d<=maxDays).length);
     appData.forgedDays = (appData.forgedDays||[]).filter(d=>d!==day);
     updateStats();
     showVictoryScreen(day, quotes[day]||'Продолжай!');
@@ -403,15 +452,15 @@ function failDay() {
     document.body.appendChild(modal);
     modal.querySelector('#save-fail').addEventListener('click',()=>{
         const reason = modal.querySelector('#fail-reason').value || 'Не указана';
-        const completed = appData.currentAttempt.completedDays.length;
-        const maxDay = completed > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0;
+        const completed = appData.currentAttempt.completedDays.filter(d=>d<=maxDays).length;
+        const maxDay = completed > 0 ? Math.max(...appData.currentAttempt.completedDays.filter(d=>d<=maxDays)) : 0;
         const failDayNum = maxDay + 1;
         if (!appData.forgedDays) appData.forgedDays = [];
         if (failDayNum <= maxDays && !appData.forgedDays.includes(failDayNum)) appData.forgedDays.push(failDayNum);
         appData.attemptsHistory.push({ startDate: appData.currentAttempt.startDate, endDate: new Date().toISOString(), daysCompleted: completed, reason });
         if (userPlan === 'premium') {
             const savedDays = [...appData.currentAttempt.completedDays];
-            appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: savedDays };
+            appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: savedDays, lastCompletedDate: null };
         } else {
             appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
         }
@@ -459,7 +508,7 @@ function showPopup(emoji, title, message) {
     popup.addEventListener('click',(e)=>{if(e.target===popup)popup.remove();});
 }
 
-// ========== ДОСТИЖЕНИЯ ==========
+// ========== ДОСТИЖЕНИЯ (Premium) ==========
 function checkAchievements() {
     if (userPlan !== 'premium') return;
     const comp = appData.currentAttempt?.completedDays?.length || 0;
