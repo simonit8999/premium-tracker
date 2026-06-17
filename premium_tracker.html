@@ -534,7 +534,7 @@ function toggleNotifyFromTracker() {
     document.getElementById('notifyToggleBtn').onclick = disableNotifyFromTracker;
     
     if (isTelegram) {
-        tg.openTelegramLink('https://t.me/Choice111Bot?start=notify_' + hour.padStart(2,'0') + '_' + minute.padStart(2,'0') + '_' + tz);
+        tg.openTelegramLink('https://t.me/Choice111Bot?start=setnotify_' + hour.padStart(2,'0') + '_' + minute.padStart(2,'0') + '_' + tz);
     }
 }
 
@@ -547,7 +547,7 @@ function disableNotifyFromTracker() {
     document.getElementById('notifyToggleBtn').onclick = toggleNotifyFromTracker;
     
     if (isTelegram) {
-        tg.openTelegramLink('https://t.me/Choice111Bot?start=notify_off');
+        tg.openTelegramLink('https://t.me/Choice111Bot?start=setnotify_off');
     }
 }
 
