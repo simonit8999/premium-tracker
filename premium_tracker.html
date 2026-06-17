@@ -135,7 +135,6 @@
         <div class="logo" id="planLogo">30 Дней</div>
     </div>
     <div class="main-content" id="main-content">
-        <!-- ТРЕКЕР -->
         <div class="screen active" id="screen-tracker">
             <div class="card"><div class="progress-container"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div><div style="text-align:center;font-weight:700;color:var(--gold);font-size:13px;" id="progress-text">0% завершено</div></div>
             <div class="stats-row"><div class="stat-item"><div class="stat-value" id="total-days">0</div><div class="stat-label">Всего дней</div></div><div class="stat-item"><div class="stat-value" id="best-streak">0</div><div class="stat-label">Лучшая серия</div></div><div class="stat-item"><div class="stat-value" id="total-attempts">0</div><div class="stat-label">Попыток</div></div></div>
@@ -145,7 +144,6 @@
             <div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="btn btn-gold btn-block" onclick="completeDay()">✅ Выполнил</button><button class="btn btn-danger" style="flex:1;" onclick="failDay()">❌ Сорвался</button><button class="btn btn-outline" style="flex:1;" onclick="helpMe()">🆘 ПОМОГИТЕ</button></div>
             <button class="btn btn-outline btn-block btn-sm" onclick="resetAttempt()">🔄 Начать новую попытку</button>
         </div>
-        <!-- PREMIUM-ЭКРАН (для basic) -->
         <div class="screen" id="screen-premium">
             <div class="premium-card">
                 <div class="premium-feature"><span style="font-size:1.4rem;">📅</span><div><div style="color:var(--gold);font-weight:bold;font-size:0.8rem;">60 дней полной трансформации</div><div style="color:var(--text-muted);font-size:0.65rem;margin-top:2px;">Новый уровень: ты не борешься с собой — ты строишь себя.</div></div></div>
@@ -157,7 +155,6 @@
             </div>
             <button class="premium-btn" onclick="window.open('https://t.me/Choice_on_Bot','_blank')">👑 Получить Premium</button>
         </div>
-        <!-- Доп. экраны Premium -->
         <div class="screen" id="screen-history"><h3 style="color:var(--gold);margin:8px 0;">📋 История попыток</h3><div id="history-list" style="max-height:calc(100vh - 150px);overflow-y:auto;"></div></div>
         <div class="screen" id="screen-achievements"><h3 style="color:var(--gold);margin:8px 0;">🏆 Достижения</h3><div id="achievements-list" style="max-height:calc(100vh - 200px);overflow-y:auto;"></div><button class="btn btn-gold btn-block" id="certificate-btn" style="display:none;" onclick="getCertificate()">🎓 Получить сертификат</button></div>
         <div class="screen" id="screen-ai"><h3 style="color:var(--gold);margin:8px 0;">🤖 ИИ-Промпты</h3><a class="link-item" href="https://t.me/c/3503823617/307" target="_blank">📋 Промпт перед стартом</a><a class="link-item" href="https://t.me/c/3503823617/307" target="_blank">📋 Принцип Парето (после 30 дн)</a><h4 style="color:var(--gold);margin-top:12px;font-size:13px;">Бесплатные ИИ:</h4><a class="link-item" href="https://chat.openai.com" target="_blank">🤖 ChatGPT</a><a class="link-item" href="https://claude.ai" target="_blank">🤖 Claude</a><a class="link-item" href="https://chat.deepseek.com" target="_blank">🤖 DeepSeek</a><a class="link-item" href="https://gemini.google.com" target="_blank">🤖 Gemini</a><a class="link-item" href="https://copilot.microsoft.com" target="_blank">🤖 Copilot</a></div>
@@ -165,7 +162,28 @@
             <div class="setting-block"><h3>🎨 Тема оформления</h3><div class="toggle-row"><span>Тёмная / Светлая</span><label class="toggle-switch"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span class="slider"></span></label></div></div>
             <div class="setting-block"><h3>🌐 Язык</h3><div style="display:flex;gap:8px;align-items:center;"><span id="lang-label">Русский</span><button class="btn btn-outline btn-sm" onclick="toggleLanguage()">Сменить</button></div></div>
             <div class="setting-block"><h3>💬 Связь с автором</h3><a href="https://t.me/Piholaa" target="_blank" class="link-item" style="text-align:center;">✉️ Написать @Piholaa</a></div>
-            <div class="setting-block"><h3>🔔 Уведомления</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><input type="number" id="notify-hour" placeholder="Час" min="0" max="23" style="width:50px;"><span>:</span><input type="number" id="notify-minute" placeholder="Мин" min="0" max="59" style="width:50px;"><select id="timezone" style="flex:1;min-width:100px;"><option value="Europe/Moscow">Москва</option><option value="Europe/London">Лондон</option><option value="America/New_York">Нью-Йорк</option></select><button class="btn btn-gold btn-sm" onclick="saveNotificationSettings()">💾</button></div></div></div>
+            <div class="setting-block"><h3>🔔 Уведомления</h3>
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                    <input type="number" id="notify-hour" placeholder="Час" min="0" max="23" style="width:50px;">
+                    <span>:</span>
+                    <input type="number" id="notify-minute" placeholder="Мин" min="0" max="59" style="width:50px;">
+                </div>
+                <select id="timezone" style="width:100%;margin-top:6px;">
+                    <option value="Europe/Moscow">Москва (UTC+3)</option>
+                    <option value="Europe/Kiev">Киев (UTC+3)</option>
+                    <option value="Europe/Minsk">Минск (UTC+3)</option>
+                    <option value="Europe/Warsaw">Варшава (UTC+2)</option>
+                    <option value="Asia/Almaty">Алматы (UTC+6)</option>
+                    <option value="Asia/Yekaterinburg">Екатеринбург (UTC+5)</option>
+                    <option value="Asia/Novosibirsk">Новосибирск (UTC+7)</option>
+                    <option value="Europe/Berlin">Берлин (UTC+2)</option>
+                    <option value="Europe/London">Лондон (UTC+1)</option>
+                    <option value="America/New_York">Нью-Йорк (UTC-4)</option>
+                </select>
+                <div id="notificationStatus" style="margin-top:6px;font-size:0.65rem;color:var(--text-secondary);">⏸ Уведомления выключены</div>
+                <button class="btn btn-gold btn-sm" id="notifyToggleBtn" style="margin-top:8px;width:100%;" onclick="toggleNotifyFromTracker()">🔔 Включить уведомления</button>
+            </div>
+        </div>
     </div>
 </div>
 <nav class="nav" id="bottomNav">
@@ -201,7 +219,7 @@ const quotes = {
 31:"Ты перевалил за половину.",32:"Мозг перестроился на 70%.",33:"Ты лучше себя вчерашнего.",34:"Дофаминовая яма позади.",35:"Пять недель. Голос глубже.",36:"Что изменилось за 36 дней?",37:"Ты управляешь собой.",38:"Вторая половина пути.",39:"Энергия пугает окружающих.",40:"Сорок дней.",41:"Сравни себя с днём 0.",42:"Ты переписал нейронные связи.",43:"Не трать силу на пустые разговоры.",44:"До конца две недели.",45:"Тестостерон на максимуме.",46:"Ты — версия 2.0.",47:"Срывы других — не твоя история.",48:"Не слушай мозг.",49:"Ещё 11 дней.",50:"Пятьдесят. Финишная прямая.",51:"Каждый день — твой рекорд.",52:"Ты спокоен и уверен.",53:"Осталась неделя.",54:"Сон глубокий.",55:"Не торгуйся.",56:"Ты делаешь то что другие обещают.",57:"Ты на пике.",58:"Предпоследний рывок.",59:"Завтра — день 60.",60:"Ты сделал это. 60 дней."
 };
 
-const DEFAULT_DATA = { currentAttempt: null, totalDays: 0, bestStreak: 0, attemptsHistory: [], achievements: {}, theme: 'dark', language: 'ru', notifications: { hour: 9, minute: 0, timezone: 'Europe/Moscow' }, currentPage: 0, forgedDays: [] };
+const DEFAULT_DATA = { currentAttempt: null, totalDays: 0, bestStreak: 0, attemptsHistory: [], achievements: {}, theme: 'dark', language: 'ru', notifications: { enabled: false, hour: '20', minute: '00', timezone: 'Europe/Moscow' }, currentPage: 0, forgedDays: [] };
 let appData = loadData();
 
 function migrateOldData() {
@@ -265,13 +283,11 @@ function showApp() {
         document.getElementById('planBadge').textContent = '🎫 BASIC';
         document.getElementById('planBadge').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
         document.getElementById('planLogo').textContent = '30 Дней';
-        // Только трекер + Premium
         document.getElementById('nav-premium').style.display = 'flex';
         document.getElementById('nav-history').style.display = 'none';
         document.getElementById('nav-achievements').style.display = 'none';
         document.getElementById('nav-ai').style.display = 'none';
         document.getElementById('nav-settings').style.display = 'none';
-        // Стрелки пагинации скрыты
         document.getElementById('prev-page').style.display = 'none';
         document.getElementById('next-page').style.display = 'none';
         document.getElementById('page-indicator').textContent = 'Дни 1-30';
@@ -279,13 +295,11 @@ function showApp() {
         document.getElementById('planBadge').textContent = '👑 PREMIUM';
         document.getElementById('planBadge').style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
         document.getElementById('planLogo').textContent = '👑 60 Дней';
-        // Все вкладки
         document.getElementById('nav-premium').style.display = 'none';
         document.getElementById('nav-history').style.display = 'flex';
         document.getElementById('nav-achievements').style.display = 'flex';
         document.getElementById('nav-ai').style.display = 'flex';
         document.getElementById('nav-settings').style.display = 'flex';
-        // Стрелки пагинации видны
         document.getElementById('prev-page').style.display = 'flex';
         document.getElementById('next-page').style.display = 'flex';
     }
@@ -400,7 +414,6 @@ function completeDay() {
     const nextDay = (appData.currentAttempt.completedDays.length > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0) + 1;
     if (nextDay > maxDays) { showPopup('👑', 'Поздравляем!', `Завершено ${maxDays} дней!`); return; }
     
-    // Проверка: 1 день в сутки
     const today = new Date().toDateString();
     if (appData.currentAttempt.lastCompletedDate === today && appData.currentAttempt.completedDays.includes(nextDay - 1)) {
         showPopup('⚠️', 'Подождите!', 'Можно отметить только 1 день в сутки');
@@ -431,10 +444,8 @@ function completePastDay(day) {
     const maxDays = userPlan === 'premium' ? 60 : 30;
     if (!appData.currentAttempt) appData.currentAttempt = { startDate: new Date().toISOString(), completedDays: [] };
     if (appData.currentAttempt.completedDays.includes(day)) return;
-    
     const maxComp = appData.currentAttempt.completedDays.length > 0 ? Math.max(...appData.currentAttempt.completedDays) : 0;
     if (day > maxComp + 1) { showPopup('🔒','Недоступно','Сначала отметь предыдущие дни'); return; }
-    
     appData.currentAttempt.completedDays.push(day);
     appData.currentAttempt.completedDays.sort((a,b)=>a-b);
     appData.totalDays++;
@@ -508,7 +519,39 @@ function showPopup(emoji, title, message) {
     popup.addEventListener('click',(e)=>{if(e.target===popup)popup.remove();});
 }
 
-// ========== ДОСТИЖЕНИЯ (Premium) ==========
+// ========== УВЕДОМЛЕНИЯ ==========
+function toggleNotifyFromTracker() {
+    const hour = document.getElementById('notify-hour').value || '20';
+    const minute = document.getElementById('notify-minute').value || '00';
+    const tz = document.getElementById('timezone').value;
+    
+    appData.notifications = { enabled: true, hour: hour.padStart(2,'0'), minute: minute.padStart(2,'0'), timezone: tz };
+    saveData();
+    
+    document.getElementById('notifyToggleBtn').textContent = '🔔 Выключить уведомления';
+    document.getElementById('notifyToggleBtn').classList.add('btn-danger');
+    document.getElementById('notificationStatus').textContent = '✅ Включены на ' + hour.padStart(2,'0') + ':' + minute.padStart(2,'0');
+    document.getElementById('notifyToggleBtn').onclick = disableNotifyFromTracker;
+    
+    if (isTelegram) {
+        tg.openTelegramLink('https://t.me/Choice111Bot?start=notify_' + hour.padStart(2,'0') + '_' + minute.padStart(2,'0') + '_' + tz);
+    }
+}
+
+function disableNotifyFromTracker() {
+    appData.notifications = { enabled: false, hour: '20', minute: '00', timezone: 'Europe/Moscow' };
+    saveData();
+    document.getElementById('notifyToggleBtn').textContent = '🔔 Включить уведомления';
+    document.getElementById('notifyToggleBtn').classList.remove('btn-danger');
+    document.getElementById('notificationStatus').textContent = '⏸ Уведомления выключены';
+    document.getElementById('notifyToggleBtn').onclick = toggleNotifyFromTracker;
+    
+    if (isTelegram) {
+        tg.openTelegramLink('https://t.me/Choice111Bot?start=notify_off');
+    }
+}
+
+// ========== ДОСТИЖЕНИЯ ==========
 function checkAchievements() {
     if (userPlan !== 'premium') return;
     const comp = appData.currentAttempt?.completedDays?.length || 0;
@@ -566,19 +609,20 @@ function toggleLanguage() {
     document.getElementById('lang-label').textContent = appData.language === 'ru' ? 'Русский' : 'English';
     saveData();
 }
-function saveNotificationSettings() {
-    appData.notifications = { hour: parseInt(document.getElementById('notify-hour').value)||9, minute: parseInt(document.getElementById('notify-minute').value)||0, timezone: document.getElementById('timezone').value };
-    saveData();
-    showPopup('🔔','Сохранено!','Настройки обновлены');
-}
 
 function initApp() {
     if (appData.theme === 'light') { document.body.classList.add('light-theme'); document.getElementById('theme-toggle').checked = true; }
     if (appData.language === 'en') document.getElementById('lang-label').textContent = 'English';
     if (appData.notifications) {
-        document.getElementById('notify-hour').value = appData.notifications.hour || 9;
-        document.getElementById('notify-minute').value = appData.notifications.minute || 0;
+        document.getElementById('notify-hour').value = appData.notifications.hour || '20';
+        document.getElementById('notify-minute').value = appData.notifications.minute || '00';
         document.getElementById('timezone').value = appData.notifications.timezone || 'Europe/Moscow';
+        if (appData.notifications.enabled) {
+            document.getElementById('notifyToggleBtn').textContent = '🔔 Выключить уведомления';
+            document.getElementById('notifyToggleBtn').classList.add('btn-danger');
+            document.getElementById('notifyToggleBtn').onclick = disableNotifyFromTracker;
+            document.getElementById('notificationStatus').textContent = '✅ Включены на ' + (appData.notifications.hour||'20') + ':' + (appData.notifications.minute||'00');
+        }
     }
     updateStats();
     if (userPlan === 'premium') renderAchievements();
