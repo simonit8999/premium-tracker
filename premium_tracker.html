@@ -533,8 +533,49 @@ function toggleNotifyFromTracker() {
     document.getElementById('notificationStatus').textContent = '✅ Включены на ' + hour.padStart(2,'0') + ':' + minute.padStart(2,'0');
     document.getElementById('notifyToggleBtn').onclick = disableNotifyFromTracker;
     
-    if (isTelegram) {
-        tg.openTelegramLink('https://t.me/Choice111Bot?start=setnotify_' + hour.padStart(2,'0') + '_' + minute.padStart(2,'0') + '_' + tz);
+    // Отправляем в API
+    if (userId) {
+        fetch(`${API_URL}/api/sync`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                user_id: userId,
+                notification_settings: {
+                    enabled: true,
+                    hour: hour.padStart(2,'0'),
+                    minute: minute.padStart(2,'0'),
+                    timezone: tz
+                }
+            })
+        }).catch(()=>{});
+        showPopup('✅', 'Уведомления включены!', 'Бот напомнит в ' + hour.padStart(2,'0') + ':' + minute.padStart(2,'0'));
+    }
+}
+
+function disableNotifyFromTracker() {
+    appData.notifications = { enabled: false, hour: '20', minute: '00', timezone: 'Europe/Moscow' };
+    saveData();
+    document.getElementById('notifyToggleBtn').textContent = '🔔 Включить уведомления';
+    document.getElementById('notifyToggleBtn').classList.remove('btn-danger');
+    document.getElementById('notificationStatus').textContent = '⏸ Уведомления выключены';
+    document.getElementById('notifyToggleBtn').onclick = toggleNotifyFromTracker;
+    
+    // Отправляем в API
+    if (userId) {
+        fetch(`${API_URL}/api/sync`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                user_id: userId,
+                notification_settings: {
+                    enabled: false,
+                    hour: '20',
+                    minute: '00',
+                    timezone: 'Europe/Moscow'
+                }
+            })
+        }).catch(()=>{});
+        showPopup('🔕', 'Уведомления отключены');
     }
 }
 
